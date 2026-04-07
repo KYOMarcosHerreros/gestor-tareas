@@ -25,7 +25,15 @@ namespace TareasAPI.Services
 
         public async Task<Tarea> CreateAsync(Tarea tarea)
         {
-            // Aquí podrías añadir lógica extra, como validar datos
+            // LÓGICA DE NEGOCIO: 
+            // 1. Asignamos la fecha de creación automáticamente al momento actual
+            tarea.FechaCreacion = DateTime.Now;
+
+            // 2. Si la tarea viene sin estado (o queremos forzarlo), 
+            // nos aseguramos de que empiece como 'Pendiente'
+            tarea.Estado = EstadoTarea.Pendiente;
+
+            // Ahora sí, enviamos la tarea ya preparada al repositorio
             return await _repository.CreateAsync(tarea);
         }
 
