@@ -5,34 +5,38 @@ using TareasAPI.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+//CONFIGURACIÓN DE CORS (Para que tu compañeros puedan conectar su Front)
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(policy =>
+    {
+        policy.AllowAnyOrigin()
+              .AllowAnyMethod()
+              .AllowAnyHeader();
+    });
+});
 
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// Registrar el DbContext con SQLite como base de datos
 builder.Services.AddDbContext<TareasContext>(options =>
     options.UseSqlite("Data Source=tareas.db"));
 
-//AddScoped: se crea una instancia nueva por cada petición HTTP que reciba la API
+// Inyección de dependencias
 builder.Services.AddScoped<ITareaRepository, TareaRepository>();
 builder.Services.AddScoped<ITareaService, TareaService>();
 
 var app = builder.Build();
-                                    
-// Configure the HTTP request pipeline.
-//if (app.Environment.IsDevelopment())
-//{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-//}
+
+app.UseSwagger();
+app.UseSwaggerUI();
 
 app.UseHttpsRedirection();
 
-app.UseAuthorization();
+app.UseCors();
 
+app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
