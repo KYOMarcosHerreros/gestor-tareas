@@ -1,5 +1,6 @@
 using TareasAPI.Models;
 using TareasAPI.Repositories;
+using System.Linq;
 
 namespace TareasAPI.Services
 {
@@ -7,7 +8,6 @@ namespace TareasAPI.Services
     {
         private readonly ITareaRepository _repository;
 
-        // El servicio recibe el repositorio por el constructor
         public TareaService(ITareaRepository repository)
         {
             _repository = repository;
@@ -15,7 +15,11 @@ namespace TareasAPI.Services
 
         public async Task<IEnumerable<Tarea>> GetAllAsync()
         {
-            return await _repository.GetAllAsync();
+            // Obtenemos todas las tareas del repositorio
+            var tareas = await _repository.GetAllAsync();
+
+            // Ordenamos para que las tareas más recientes (por FechaCreacion) salgan primero
+            return tareas.OrderByDescending(t => t.FechaCreacion);
         }
 
         public async Task<Tarea?> GetByIdAsync(int id)
@@ -25,21 +29,27 @@ namespace TareasAPI.Services
 
         public async Task<Tarea> CreateAsync(Tarea tarea)
         {
-            // LÓGICA DE NEGOCIO: 
-            // 1. Asignamos la fecha de creación automáticamente al momento actual
             tarea.FechaCreacion = DateTime.Now;
 
-            // 2. Si la tarea viene sin estado (o queremos forzarlo), 
-            // nos aseguramos de que empiece como 'Pendiente'
             tarea.Estado = EstadoTarea.Pendiente;
 
-            // Ahora sí, enviamos la tarea ya preparada al repositorio
+            // Enviamos la tarea ya preparada al repositorio
             return await _repository.CreateAsync(tarea);
         }
 
-        public async Task<Tarea?> UpdateAsync(int id, Tarea tarea)
+        public async Task<Tarea?> UpdateAsync(int id, Tarea tareaEditada)
         {
-            return await _repository.UpdateAsync(id, tarea);
+            var tareaEnDb = await _repository.GetByIdAsync(id);
+
+            if (tareaEnDb == null) return null;
+
+            tareaEnDb.Titulo = tareaEditada.Titulo;
+            tareaEnDb.Descripcion = tareaEditada.Descripcion;
+            tareaEnDb.Estado = tareaEditada.Estado;
+            tareaEnDb.Prioridad = tareaEditada.Prioridad;
+            tareaEnDb.FechaLimite = tareaEditada.FechaLimite;
+
+            return await _repository.UpdateAsync(id, tareaEnDb);
         }
 
         public async Task<bool> DeleteAsync(int id)
