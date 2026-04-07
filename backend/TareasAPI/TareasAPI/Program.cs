@@ -1,3 +1,5 @@
+using TareasAPI.Repositories;
+using TareasAPI.Services;
 using Microsoft.EntityFrameworkCore;
 using TareasAPI.Data;
 
@@ -14,14 +16,18 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<TareasContext>(options =>
     options.UseSqlite("Data Source=tareas.db"));
 
+//AddScoped: se crea una instancia nueva por cada petición HTTP que reciba la API
+builder.Services.AddScoped<ITareaRepository, TareaRepository>();
+builder.Services.AddScoped<ITareaService, TareaService>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
+//if (app.Environment.IsDevelopment())
+//{
     app.UseSwagger();
     app.UseSwaggerUI();
-}
+//}
 
 app.UseHttpsRedirection();
 
