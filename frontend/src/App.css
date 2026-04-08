@@ -290,3 +290,52 @@ html, body, #root {
   margin-top: 20px;
   align-items: center;
 }
+
+/* --- MENSAJES DE ALERTA (ERRORES Y ÉXITO) --- */
+.alert-message {
+  text-align: center;
+  font-size: 0.9rem;
+  font-weight: bold;
+  padding: 10px 15px;
+  border-radius: 6px;
+  margin-bottom: 20px;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.alert-error {
+  background-color: #fee2e2; /* Fondo rojo clarito */
+  color: #dc2626; /* Texto rojo oscuro */
+  border: 1px solid #f87171;
+}
+
+.alert-success {
+  background-color: #dcfce7; /* Fondo verde clarito */
+  color: #16a34a; /* Texto verde oscuro */
+  border: 1px solid #86efac;
+}
+
+/* Animación suave para que el mensaje aparezca de la nada */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* --- ENLACES PIE DE FORMULARIO DE AUTENTICACIÓN --- */
+.auth-footer-text {
+  text-align: center;
+  margin-top: 15px;
+  font-size: 0.9rem;
+  color: var(--dark-grey);
+}
+
+.auth-footer-link {
+  color: var(--primary-blue);
+  font-weight: bold;
+  text-decoration: none;
+  transition: color 0.2s ease; /* Pequeña transición para cuando pasas el ratón */
+}
+
+.auth-footer-link:hover {
+  color: #154c79; /* Un azul un poco más oscuro al pasar el ratón */
+  text-decoration: underline;
+}

@@ -19,28 +19,26 @@ function TaskForm() {
     const nuevaTarea = {
       titulo: titulo,
       prioridad: prioridad,
-      estado: 'Pendiente', // Por defecto una nueva tarea está pendiente
+      estado: 'Pendiente', 
       fechaCreacion: new Date().toISOString(),
       fechaLimite: fechaLimite ? new Date(fechaLimite).toISOString() : null
     };
 
     try {
-      // Recuperamos el token VIP del Login
       const token = localStorage.getItem('token');
 
       const response = await fetch('https://unsocialized-unstalemated-corie.ngrok-free.dev/api/tareas', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'ngrok-skip-browser-warning': 'true', // Saltamos la advertencia de ngrok
-          'Authorization': `Bearer ${token}` // Entramos con seguridad
+          'ngrok-skip-browser-warning': 'true', 
+          'Authorization': `Bearer ${token}` 
         },
         body: JSON.stringify(nuevaTarea),
       });
 
       if (response.ok) {
-        // ¡Éxito! Volvemos al listado principal
-        navigate('/');
+        navigate('/'); // Nos vamos directamente a la lista
       } else {
         const data = await response.json();
         setError(data.message || 'Error al guardar la tarea. Revisa los datos.');
@@ -54,10 +52,15 @@ function TaskForm() {
     <div className="form-card" style={{ marginTop: '40px' }}>
       <h2 className="form-title">Crear Nueva Tarea</h2>
 
-      {/* Mensaje de error si falla la conexión o la validación */}
-      {error && <p style={{ color: 'red', textAlign: 'center', fontWeight: 'bold' }}>{error}</p>}
+      {/* SOLO DEJAMOS EL MENSAJE DE ERROR */}
+      {error && (
+        <div className="alert-message alert-error">
+          {error}
+        </div>
+      )}
 
       <form className="main-form" onSubmit={handleSubmit}>
+        {/* ... el resto de tus inputs de titulo, prioridad y fecha quedan exactamente igual ... */}
         <div className="form-group">
           <label className="form-label">Título de la tarea</label>
           <input 

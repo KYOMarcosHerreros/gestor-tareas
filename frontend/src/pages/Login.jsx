@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
  
 // URL base de la API, cambiar cuando ngrok cambie de URL
 
@@ -81,7 +80,12 @@ function Login() {
 <div className="form-card">
 <h2 className="form-title">Iniciar Sesión</h2>
  
-        {error && <p style={{ color: 'red', textAlign: 'center', fontSize: '14px' }}>{error}</p>}
+        {/* Mensajes de feedback usando las clases limpias de tu CSS */}
+        {error && (
+          <div className="alert-message alert-error">
+            {error}
+          </div>
+        )}
  
         <form className="main-form" onSubmit={handleSubmit}>
 <div className="form-group">
@@ -133,6 +137,9 @@ function Login() {
 
             Entrar al Gestor
 </button>
+<div className="auth-footer-text">
+  ¿No eres usuario? <Link to="/registro" className="auth-footer-link">Regístrate aquí</Link>
+</div>
 </form>
 </div>
 </div>
