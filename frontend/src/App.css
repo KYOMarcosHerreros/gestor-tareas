@@ -70,10 +70,19 @@ html, body, #root {
   font-weight: 600;
 }
 
-/* GRUPO DERECHO (Botón) */
+/* GRUPO DERECHO (Usuario + Botón) */
 .header-right-group {
   display: flex;
   align-items: center;
+  gap: 20px; /* <--- ESTA ES LA MAGIA: 20 píxeles de separación entre el texto y el botón */
+}
+
+/* ESTILO DEL TEXTO DEL USUARIO */
+.header-username {
+  color: white; /* Letra blanca para que contraste */
+  font-size: 0.95rem; /* Tamaño elegante */
+  font-weight: 500; /* Un poco de grosor, pero sin ser negrita del todo */
+  opacity: 0.9; /* Un pelín transparente para que el botón destaque más */
 }
 
 /* BOTÓN CERRAR SESIÓN (Estilo Pastilla con Sombra) */
