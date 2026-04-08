@@ -31,7 +31,6 @@ namespace TareasAPI.Services
             };
         }
 
-        // Estos se quedan igual, solo llaman al repositorio
         public async Task<Tarea?> GetByIdAsync(int id) => await _repository.GetByIdAsync(id);
         public async Task<Tarea> CreateAsync(Tarea tarea) => await _repository.CreateAsync(tarea);
         public async Task<Tarea?> UpdateAsync(int id, Tarea tarea) => await _repository.UpdateAsync(id, tarea);

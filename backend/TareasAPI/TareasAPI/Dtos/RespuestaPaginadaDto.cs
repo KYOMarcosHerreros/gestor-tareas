@@ -5,7 +5,7 @@ namespace TareasAPI.Models
 {
     public class RespuestaPaginadaDto<T>
     {
-        // La lista de datos (tareas, usuarios, etc.)
+
         public IEnumerable<T> Datos { get; set; } = new List<T>();
 
         // Metadatos de la paginación
@@ -14,7 +14,7 @@ namespace TareasAPI.Models
         public int TotalPaginas { get; set; }
         public int TamañoPagina { get; set; }
 
-        // Propiedades calculadas para ayudar al Front (compañero)
+        // Propiedades calculadas para ayudar al Front
         public bool TienePaginaAnterior => PaginaActual > 1;
         public bool TienePaginaSiguiente => PaginaActual < TotalPaginas;
     }

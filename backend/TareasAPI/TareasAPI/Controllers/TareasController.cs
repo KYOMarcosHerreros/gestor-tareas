@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using TareasAPI.Models;
 using TareasAPI.Services;
 using Microsoft.AspNetCore.Authorization;
-using TareasAPI.Dtos; // <--- AÑADE ESTO para usar RespuestaPaginadaDto
+using TareasAPI.Dtos;
 
 namespace TareasAPI.Controllers
 {
@@ -18,7 +18,6 @@ namespace TareasAPI.Controllers
             _service = service;
         }
 
-        // --- ESTE ES EL MÉTODO QUE CAMBIA PARA LA PAGINACIÓN ---
         [HttpGet]
         public async Task<ActionResult<RespuestaPaginadaDto<Tarea>>> GetTareas([FromQuery] int pagina = 1, [FromQuery] int tamaño = 10)
         {
@@ -30,7 +29,6 @@ namespace TareasAPI.Controllers
             return Ok(respuesta);
         }
 
-        // Los demás métodos (Get por ID, Post, Put, Delete) se quedan EXACTAMENTE IGUAL
 
         [HttpGet("{id}")]
         public async Task<ActionResult<Tarea>> GetTarea(int id)

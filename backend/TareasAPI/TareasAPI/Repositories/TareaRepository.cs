@@ -43,7 +43,7 @@ namespace TareasAPI.Repositories
         public async Task<Tarea?> UpdateAsync(int id, Tarea tarea)
         {
             // Aquí usamos TryUpdate para evitar errores de rastreo si es necesario, 
-            // pero lo dejamos como lo tenías que es funcional:
+
             _context.Entry(tarea).State = EntityState.Modified;
             await _context.SaveChangesAsync();
             return tarea;

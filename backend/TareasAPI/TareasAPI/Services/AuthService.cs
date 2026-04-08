@@ -38,19 +38,17 @@ namespace TareasAPI.Services
 
         public async Task<string?> Login(UsuarioDto request)
         {
-            // 1. Buscamos al usuario por nombre
             var usuario = await _context.Usuarios.FirstOrDefaultAsync(u => u.Username == request.Username);
 
-            // Si no existe, fuera
             if (usuario == null) return null;
 
-            // 2. Usamos el "Salt" que guardamos en el registro para verificar la contraseña
+            //Usamos el "Salt" que guardamos en el registro para verificar la contraseña
             using var hmac = new HMACSHA512(usuario.PasswordSalt);
 
-            // 3. Calculamos el hash de la contraseña que nos acaban de pasar
+            //Calculamos el hash de la contraseña que nos acaban de pasar
             var computedHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(request.Password));
 
-            // 4. Comparamos byte a byte
+            //Comparamos byte a byte (cada caracter del hash)
             for (int i = 0; i < computedHash.Length; i++)
             {
                 if (computedHash[i] != usuario.PasswordHash[i]) return null;

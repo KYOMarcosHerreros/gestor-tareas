@@ -8,7 +8,7 @@ using TareasAPI.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// --- 1. CONFIGURACIÓN DE SEGURIDAD (JWT) ---
+//CONFIGURACIÓN DE SEGURIDAD (JWT)
 // Leemos la clave secreta que pusiste en el appsettings.json
 var tokenKey = builder.Configuration.GetSection("AppSettings:Token").Value;
 if (string.IsNullOrEmpty(tokenKey)) throw new Exception("No se encontró el Token en AppSettings");
@@ -25,7 +25,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
-// --- 2. SERVICIOS (CORS, Controllers, DB) ---
+//SERVICIOS (CORS, Controllers, DB)
 builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(policy =>
@@ -75,20 +75,19 @@ builder.Services.AddDbContext<TareasContext>(options =>
 // Inyección de dependencias
 builder.Services.AddScoped<ITareaRepository, TareaRepository>();
 builder.Services.AddScoped<ITareaService, TareaService>();
-builder.Services.AddScoped<IAuthService, AuthService>(); // Inyectamos el nuevo servicio de Auth
+builder.Services.AddScoped<IAuthService, AuthService>();
 
 var app = builder.Build();
 
-// --- 3. PIPELINE DE EJECUCIÓN ---
 app.UseSwagger();
 app.UseSwaggerUI();
 
 app.UseHttpsRedirection();
 
-// El CORS siempre de los primeros
+
 app.UseCors();
 
-// ORDEN CRÍTICO: Primero quién eres (Authentication) y luego qué puedes hacer (Authorization)
+
 app.UseAuthentication();
 app.UseAuthorization();
 
