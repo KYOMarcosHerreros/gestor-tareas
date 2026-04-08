@@ -8,8 +8,7 @@ using TareasAPI.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
-//CONFIGURACIÓN DE SEGURIDAD (JWT)
-// Leemos la clave secreta que pusiste en el appsettings.json
+// CONFIGURACIÓN DE SEGURIDAD (JWT)
 var tokenKey = builder.Configuration.GetSection("AppSettings:Token").Value;
 if (string.IsNullOrEmpty(tokenKey)) throw new Exception("No se encontró el Token en AppSettings");
 
@@ -25,7 +24,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
-//SERVICIOS (CORS, Controllers, DB)
+// SERVICIOS (CORS, Controllers, DB)
 builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(policy =>
@@ -36,13 +35,20 @@ builder.Services.AddCors(options =>
     });
 });
 
-builder.Services.AddControllers();
+// AddControllers una sola vez con la configuración de enums como strings
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.Converters.Add(
+            new System.Text.Json.Serialization.JsonStringEnumConverter()
+        );
+    });
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo { Title = "Tareas API", Version = "v1" });
 
-    // Definimos la seguridad JWT de forma correcta
     c.AddSecurityDefinition("Bearer", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
     {
         Name = "Authorization",
@@ -84,9 +90,7 @@ app.UseSwaggerUI();
 
 app.UseHttpsRedirection();
 
-
 app.UseCors();
-
 
 app.UseAuthentication();
 app.UseAuthorization();

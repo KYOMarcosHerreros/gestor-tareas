@@ -22,6 +22,8 @@ namespace TareasAPI.Models
         public DateTime FechaCreacion { get; set; }
 
         public DateTime FechaLimite { get; set; }
+        [Required]
+        public int UsuarioId { get; set; }
     }
 
     // Enum que define los estados posibles de una tarea

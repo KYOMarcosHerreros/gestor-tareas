@@ -61,7 +61,9 @@ namespace TareasAPI.Services
         private string CrearToken(Usuario usuario)
         {
             var claims = new List<Claim> {
-                new Claim(ClaimTypes.Name, usuario.Username)
+                new Claim(ClaimTypes.Name, usuario.Username),
+                // Añadimos el ID del usuario al token para que el TareasController pueda leerlo
+                new Claim(ClaimTypes.NameIdentifier, usuario.Id.ToString())
             };
 
             // Sacaremos la clave secreta del appsettings.json

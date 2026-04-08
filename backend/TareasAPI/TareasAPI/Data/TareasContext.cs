@@ -1,7 +1,27 @@
 using Microsoft.EntityFrameworkCore;
 using TareasAPI.Models;
 
+
+
+using Microsoft.EntityFrameworkCore;
+using TareasAPI.Models;
+
 namespace TareasAPI.Data
+{
+    public class TareasContext : DbContext
+    {
+        public TareasContext(DbContextOptions<TareasContext> options) : base(options)
+        {
+        }
+
+        public DbSet<Tarea> Tareas { get; set; }
+        public DbSet<Usuario> Usuarios { get; set; }
+    }
+}
+
+
+
+/*namespace TareasAPI.Data
 {
     // DbContext es la clase de EF Core que gestiona la conexión con la base de datos
     public class TareasContext : DbContext
@@ -16,4 +36,4 @@ namespace TareasAPI.Data
         public DbSet<Tarea> Tareas { get; set; }
         public DbSet<Usuario> Usuarios { get; set; }
     }
-}
+}*/

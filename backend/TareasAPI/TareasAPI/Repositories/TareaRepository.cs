@@ -14,9 +14,12 @@ namespace TareasAPI.Repositories
         }
 
         // Este es el método que suele dar error si la interfaz no coincide
-        public async Task<(IEnumerable<Tarea> datos, int total)> ObtenerPaginadoAsync(int numeroPagina, int tamañoPagina)
+        public async Task<(IEnumerable<Tarea> datos, int total)> ObtenerPaginadoAsync(int numeroPagina, int tamañoPagina, int usuarioId)
         {
-            var consulta = _context.Tareas.AsQueryable();
+            // Filtramos por UsuarioId antes de contar y antes de paginar
+            var consulta = _context.Tareas
+                .Where(t => t.UsuarioId == usuarioId)
+                .AsQueryable();
 
             int total = await consulta.CountAsync();
 
@@ -43,7 +46,6 @@ namespace TareasAPI.Repositories
         public async Task<Tarea?> UpdateAsync(int id, Tarea tarea)
         {
             // Aquí usamos TryUpdate para evitar errores de rastreo si es necesario, 
-
             _context.Entry(tarea).State = EntityState.Modified;
             await _context.SaveChangesAsync();
             return tarea;

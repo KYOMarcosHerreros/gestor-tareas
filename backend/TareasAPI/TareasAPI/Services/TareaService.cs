@@ -13,12 +13,12 @@ namespace TareasAPI.Services
             _repository = repository;
         }
 
-        public async Task<RespuestaPaginadaDto<Tarea>> ListarTareasPaginadasAsync(int pagina, int tamaño)
+        // Ahora recibe el usuarioId
+        public async Task<RespuestaPaginadaDto<Tarea>> ListarTareasPaginadasAsync(int pagina, int tamaño, int usuarioId)
         {
-            // Llamamos a tu nuevo repositorio
-            var (datos, total) = await _repository.ObtenerPaginadoAsync(pagina, tamaño);
+            // Pasamos el usuarioId al repositorio (aquí es donde se hará el .Where en la DB)
+            var (datos, total) = await _repository.ObtenerPaginadoAsync(pagina, tamaño, usuarioId);
 
-            // Calculamos cuántas páginas hay en total
             var totalPaginas = (int)Math.Ceiling((double)total / tamaño);
 
             return new RespuestaPaginadaDto<Tarea>
@@ -31,6 +31,8 @@ namespace TareasAPI.Services
             };
         }
 
+        // Estos se mantienen igual porque la seguridad (verificar dueño) 
+        // ya la hemos puesto en el TareasController que te pasé antes.
         public async Task<Tarea?> GetByIdAsync(int id) => await _repository.GetByIdAsync(id);
         public async Task<Tarea> CreateAsync(Tarea tarea) => await _repository.CreateAsync(tarea);
         public async Task<Tarea?> UpdateAsync(int id, Tarea tarea) => await _repository.UpdateAsync(id, tarea);
