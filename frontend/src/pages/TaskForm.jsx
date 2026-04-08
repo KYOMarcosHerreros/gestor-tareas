@@ -1,33 +1,35 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
+// ⚠️ Mantén la URL de ngrok
+const API_URL = 'https://unsocialized-unstalemated-corie.ngrok-free.dev';
+
 function TaskForm() {
   const navigate = useNavigate();
 
-  // 1. Estados para atrapar lo que el usuario escribe
   const [titulo, setTitulo] = useState('');
   const [prioridad, setPrioridad] = useState('Baja');
   const [fechaLimite, setFechaLimite] = useState('');
+  const [descripcion, setDescripcion] = useState(''); // <-- 1. NUEVO ESTADO
   const [error, setError] = useState('');
 
-  // 2. Función que envía la tarea al túnel
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
 
-    // Preparamos el paquete de datos (JSON)
     const nuevaTarea = {
       titulo: titulo,
       prioridad: prioridad,
       estado: 'Pendiente', 
       fechaCreacion: new Date().toISOString(),
-      fechaLimite: fechaLimite ? new Date(fechaLimite).toISOString() : null
+      fechaLimite: fechaLimite ? new Date(fechaLimite).toISOString() : null,
+      descripcion: descripcion
     };
 
     try {
       const token = localStorage.getItem('token');
 
-      const response = await fetch('https://unsocialized-unstalemated-corie.ngrok-free.dev/api/tareas', {
+      const response = await fetch(`${API_URL}/api/tareas`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -38,7 +40,7 @@ function TaskForm() {
       });
 
       if (response.ok) {
-        navigate('/'); // Nos vamos directamente a la lista
+        navigate('/'); 
       } else {
         const data = await response.json();
         setError(data.message || 'Error al guardar la tarea. Revisa los datos.');
@@ -49,10 +51,9 @@ function TaskForm() {
   };
 
   return (
-    <div className="form-card" style={{ marginTop: '40px' }}>
+    <div className="form-card" style={{ marginTop: '10px ' }}>
       <h2 className="form-title">Crear Nueva Tarea</h2>
 
-      {/* SOLO DEJAMOS EL MENSAJE DE ERROR */}
       {error && (
         <div className="alert-message alert-error">
           {error}
@@ -60,7 +61,6 @@ function TaskForm() {
       )}
 
       <form className="main-form" onSubmit={handleSubmit}>
-        {/* ... el resto de tus inputs de titulo, prioridad y fecha quedan exactamente igual ... */}
         <div className="form-group">
           <label className="form-label">Título de la tarea</label>
           <input 
@@ -95,6 +95,24 @@ function TaskForm() {
             onChange={(e) => setFechaLimite(e.target.value)}
             required
           />
+        </div>
+
+        {/* 3. NUEVO CAMPO: LA DESCRIPCIÓN CON TEXTAREA */}
+        <div className="form-group">
+          <label className="form-label">Descripción (Opcional)</label>
+          <textarea 
+            className="form-input" 
+            placeholder="Añade más detalles sobre la tarea..." 
+            value={descripcion}
+            onChange={(e) => setDescripcion(e.target.value)}
+            maxLength="500"
+            rows="4" /* Lo hace más alto que un input normal */
+            style={{ resize: 'vertical', fontFamily: 'inherit' }} /* Permite al usuario estirarlo solo hacia abajo */
+          />
+          {/* Contador de caracteres dinámico */}
+          <div style={{ textAlign: 'right', fontSize: '0.8rem', color: 'var(--dark-grey)', marginTop: '4px' }}>
+            {descripcion.length} / 500
+          </div>
         </div>
 
         <div className="form-actions">

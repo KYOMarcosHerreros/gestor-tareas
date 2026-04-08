@@ -5,6 +5,7 @@ import Footer from './components/Footer';
 import TaskList from './pages/TaskList';
 import TaskForm from './pages/TaskForm';
 import Login from './pages/Login';
+import Register from './pages/Register'; // <-- 1. Importamos la nueva página
 import './App.css';
 
 function App() {
@@ -13,10 +14,11 @@ function App() {
       <Header />
       <main className="container">
         <Routes>
-          {/* Aquí están las 3 páginas de tu aplicación */}
+          {/* Aquí están las 4 páginas de tu aplicación */}
           <Route path="/" element={<TaskList />} />
           <Route path="/nueva-tarea" element={<TaskForm />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/registro" element={<Register />} /> {/* <-- 2. Añadimos la ruta */}
         </Routes>
       </main>
       <Footer />

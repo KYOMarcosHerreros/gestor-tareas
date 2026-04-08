@@ -1,24 +1,33 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
+
+// ⚠️ Mantén la URL de ngrok actualizada
+const API_URL = 'https://unsocialized-unstalemated-corie.ngrok-free.dev';
 
 function Register() {
   const navigate = useNavigate();
 
+  // 1. Añadimos el nuevo estado para la confirmación
   const [nombre, setNombre] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState(''); // <-- NUEVO ESTADO
   const [error, setError] = useState('');
   const [mensajeExito, setMensajeExito] = useState('');
 
-  // 2. Función que envía el nuevo usuario al servidor
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
     setMensajeExito('');
 
+    // 2. NUEVA VALIDACIÓN: Si no coinciden, cortamos el proceso de raíz
+    if (password !== confirmPassword) {
+      setError('Las contraseñas no coinciden. Por favor, revísalas.');
+      return; // El return hace que la función pare aquí y no ejecute el fetch
+    }
+
     try {
-      // ⚠️ ATENCIÓN: Confirma con Marcos que su ruta de registro es /api/auth/register
-      const response = await fetch('https://unsocialized-unstalemated-corie.ngrok-free.dev/api/auth/register', {
+      const response = await fetch(`${API_URL}/api/auth/register`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -26,8 +35,8 @@ function Register() {
         },
         body: JSON.stringify({
           nombre: nombre, 
-          username: email,
-          password: password
+          username: email, 
+          password: password // Enviamos solo la password original, a Marcos no le hace falta la confirmación
         }),
       });
 
@@ -41,7 +50,7 @@ function Register() {
         setError(data.message || 'Hubo un error al registrar el usuario. Revisa los datos.');
       }
     } catch (err) {
-      setError('No se pudo conectar con el servidor de Marcos.');
+      setError('No se pudo conectar. ¿El servidor o el túnel están apagados?');
     }
   };
 
@@ -50,7 +59,6 @@ function Register() {
       <div className="form-card">
         <h2 className="form-title">Crear Cuenta</h2>
         
-        {/* Mensajes de feedback usando las clases limpias de tu CSS */}
         {error && (
           <div className="alert-message alert-error">
             {error}
@@ -101,12 +109,30 @@ function Register() {
             />
           </div>
 
-          <button type="submit" className="btn-primary" style={{ marginTop: '10px', width: '100%', border: 'none', cursor: 'pointer' }}>
+          {/* 3. NUEVO INPUT: Dibujamos la caja de confirmación */}
+          <div className="form-group">
+            <label className="form-label">Confirmar Contraseña</label>
+            <input 
+              type="password" 
+              className="form-input" 
+              placeholder="Repite la contraseña" 
+              minLength="6" 
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              required 
+            />
+          </div>
+
+          <button 
+            type="submit" 
+            className="btn-primary" 
+            style={{ marginTop: '10px', width: '100%', border: 'none', cursor: 'pointer' }}
+          >
             Registrarse
           </button>
 
-          <div style={{ textAlign: 'center', marginTop: '15px', fontSize: '0.9rem', color: 'var(--dark-grey)' }}>
-            ¿Ya tienes cuenta? <Link to="/login" style={{ color: 'var(--primary-blue)', fontWeight: 'bold', textDecoration: 'none' }}>Inicia sesión</Link>
+          <div className="auth-footer-text">
+            ¿Ya tienes cuenta? <Link to="/login" className="auth-footer-link">Inicia sesión</Link>
           </div>
         </form>
       </div>

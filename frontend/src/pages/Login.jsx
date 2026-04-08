@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
+
 import { useNavigate, Link } from 'react-router-dom';
  
-// URL base de la API, cambiar cuando ngrok cambie de URL
+// URL base de la API (Asegúrate de que sea la de tu ngrok actual)
 
 const API_URL = 'https://unsocialized-unstalemated-corie.ngrok-free.dev';
  
 function Login() {
 
-  const [email, setEmail] = useState('');
+  const [email, setEmail] = useState(''); // Lo usamos como username
 
   const [password, setPassword] = useState('');
 
@@ -39,9 +40,11 @@ function Login() {
 
         body: JSON.stringify({
 
-          // Tu UsuarioDto espera "username" y "password"
+          // IMPORTANTE: Tu Backend (UsuarioDto) espera "username"
 
-          username: email,
+          // Pasamos el estado 'email' a la propiedad 'username'
+
+          username: email, 
 
           password: password,
 
@@ -51,25 +54,33 @@ function Login() {
  
       if (response.ok) {
 
-        // Tu AuthController devuelve el token directamente como string
+        // Tu AuthController devuelve el token directamente como string (text)
 
         const token = await response.text();
+ 
+        // Guardamos el token en el almacenamiento local del navegador
 
         localStorage.setItem('token', token);
+ 
+        // Si el login es correcto, navegamos a la raíz (donde están las tareas)
 
         navigate('/');
 
       } else {
 
+        // Intentamos leer el error que envíe el API
+
         const msg = await response.text();
 
-        setError(msg || 'Credenciales incorrectas');
+        setError(msg || 'Usuario o contraseña incorrectos');
 
       }
 
     } catch (err) {
 
-      setError('No se pudo conectar con el servidor. ¿Está encendido el Back?');
+      console.error(err);
+
+      setError('No se pudo conectar con el servidor. ¿Está encendido el Backend?');
 
     }
 
@@ -80,11 +91,14 @@ function Login() {
 <div className="form-card">
 <h2 className="form-title">Iniciar Sesión</h2>
  
-        {/* Mensajes de feedback usando las clases limpias de tu CSS */}
+        {/* Mensajes de error */}
+
         {error && (
-          <div className="alert-message alert-error">
+<div className="alert-message alert-error">
+
             {error}
-          </div>
+</div>
+
         )}
  
         <form className="main-form" onSubmit={handleSubmit}>
@@ -132,13 +146,35 @@ function Login() {
 
             className="btn-primary"
 
-            style={{ marginTop: '10px', width: '100%', border: 'none', cursor: 'pointer' }}
+            style={{ 
+
+              marginTop: '10px', 
+
+              width: '100%', 
+
+              border: 'none', 
+
+              cursor: 'pointer',
+
+              padding: '12px',
+
+              borderRadius: '4px',
+
+              backgroundColor: '#0056b3',
+
+              color: 'white',
+
+              fontWeight: 'bold'
+
+            }}
 >
 
             Entrar al Gestor
 </button>
-<div className="auth-footer-text">
-  ¿No eres usuario? <Link to="/registro" className="auth-footer-link">Regístrate aquí</Link>
+ 
+          <div className="auth-footer-text" style={{ marginTop: '15px', textAlign: 'center' }}>
+
+            ¿No eres usuario? <Link to="/registro" className="auth-footer-link">Regístrate aquí</Link>
 </div>
 </form>
 </div>

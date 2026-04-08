@@ -246,11 +246,10 @@ html, body, #root {
 }
 
 .form-title {
-  color: var(--primary-blue);
+  margin-top: 0;
+  margin-bottom: 20px; 
   text-align: center;
-  margin-bottom: 30px;
-  border-bottom: 1px solid #eee;
-  padding-bottom: 15px;
+  color: var(--primary-blue);
 }
 
 .main-form {
@@ -338,4 +337,91 @@ html, body, #root {
 .auth-footer-link:hover {
   color: #154c79; /* Un azul un poco más oscuro al pasar el ratón */
   text-decoration: underline;
+}
+
+
+/* =========================================
+   🪄 MAGIA DEL POP-UP (MODAL DE DETALLES)
+   ========================================= */
+
+/* El fondo oscuro que difumina la pantalla de atrás */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(4px); /* El toque profesional: difumina el fondo */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; /* Para que esté por encima de TODO */
+  animation: fadeIn 0.2s ease-in-out;
+}
+
+/* La tarjeta blanca en sí */
+.modal-content {
+  background-color: white;
+  padding: 30px;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 550px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  animation: slideUp 0.3s ease-out; /* Animación de entrada */
+}
+
+/* Título de la tarjeta flotante */
+.modal-header {
+  color: var(--primary-blue);
+  margin-top: 0;
+  border-bottom: 2px solid #f1f5f9;
+  padding-bottom: 15px;
+  margin-bottom: 20px;
+  font-size: 1.5rem;
+}
+
+/* La caja donde va la descripción larga */
+.modal-description-box {
+  background-color: #f8fafc;
+  border-left: 4px solid var(--primary-blue);
+  padding: 15px;
+  border-radius: 0 8px 8px 0;
+  margin-bottom: 25px;
+  color: #334155;
+  white-space: pre-wrap; /* Respeta los saltos de línea del usuario */
+  line-height: 1.6;
+  word-break: break-word; 
+  overflow-wrap: break-word;
+}
+
+/* Cuadrícula para los datos de abajo (Estado, Fecha, etc.) */
+.modal-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  background-color: #f1f5f9;
+  padding: 20px;
+  border-radius: 8px;
+  margin-bottom: 25px;
+}
+
+.modal-grid p {
+  margin: 0;
+  font-size: 0.95rem;
+  color: var(--dark-grey);
+}
+
+.modal-grid strong {
+  display: block;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  color: #64748b;
+  margin-bottom: 5px;
+}
+
+/* Animaciones suaves */
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
 }
