@@ -1,11 +1,13 @@
 using Microsoft.AspNetCore.Mvc;
 using TareasAPI.Models;
 using TareasAPI.Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace TareasAPI.Controllers
 {
-    [ApiController] // Indica que esta clase es un controlador de API
-    [Route("api/[controller]")] // La ruta será api/tareas
+    [ApiController]
+    [Route("api/[controller]")]
+    [Authorize] 
     public class TareasController : ControllerBase
     {
         private readonly ITareaService _service;
@@ -15,7 +17,8 @@ namespace TareasAPI.Controllers
             _service = service;
         }
 
-        // GET: api/tareas
+        // Todos estos métodos ahora requieren TOKEN obligatoriamente
+
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Tarea>>> GetTareas()
         {
@@ -23,7 +26,6 @@ namespace TareasAPI.Controllers
             return Ok(tareas);
         }
 
-        // GET: api/tareas/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Tarea>> GetTarea(int id)
         {
@@ -32,7 +34,6 @@ namespace TareasAPI.Controllers
             return Ok(tarea);
         }
 
-        // POST: api/tareas
         [HttpPost]
         public async Task<ActionResult<Tarea>> PostTarea(Tarea tarea)
         {
@@ -40,7 +41,6 @@ namespace TareasAPI.Controllers
             return CreatedAtAction(nameof(GetTarea), new { id = nuevaTarea.Id }, nuevaTarea);
         }
 
-        // PUT: api/tareas/5
         [HttpPut("{id}")]
         public async Task<IActionResult> PutTarea(int id, Tarea tarea)
         {
@@ -49,7 +49,6 @@ namespace TareasAPI.Controllers
             return NoContent();
         }
 
-        // DELETE: api/tareas/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteTarea(int id)
         {

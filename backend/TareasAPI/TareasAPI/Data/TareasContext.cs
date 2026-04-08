@@ -14,5 +14,6 @@ namespace TareasAPI.Data
         // DbSet representa la tabla "Tareas" en la base de datos
         // Cada objeto Tarea en esta lista será una fila en la tabla
         public DbSet<Tarea> Tareas { get; set; }
+        public DbSet<Usuario> Usuarios { get; set; }
     }
 }
