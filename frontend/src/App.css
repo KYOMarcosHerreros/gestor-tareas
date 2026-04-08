@@ -6,7 +6,6 @@
 }
 
 /* 1. EL TRUCO PARA EL FOOTER */
-/* Esto hace que la web ocupe siempre el 100% del alto de la pantalla */
 html, body, #root {
   min-height: 100vh;
   margin: 0;
@@ -20,15 +19,15 @@ html, body, #root {
   min-height: 100vh;
 }
 
-/* 2. HEADER PEGADO ARRIBA */
+/* 2. HEADER PEGADO ARRIBA (¡Esta es la clase que se había borrado!) */
 .main-header {
   background-color: var(--primary-blue);
   color: white;
   padding: 15px 0;
   box-shadow: 0 4px 12px rgba(0,0,0,0.15);
   position: sticky; 
-  top: 0;           /* Se queda pegado a 0px del borde superior */
-  z-index: 1000;    /* Se asegura de estar siempre por encima de las tareas */
+  top: 0; 
+  z-index: 1000; 
 }
 
 .header-content {
@@ -40,15 +39,66 @@ html, body, #root {
   padding: 0 20px;
 }
 
-.header-logo {
+/* GRUPO IZQUIERDO (Logo + Título) */
+.header-left-group {
+  display: flex;
+  align-items: center;
+}
+
+.header-kyocera-logo {
+  height: 40px; 
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.header-kyocera-logo:hover {
+  opacity: 0.8; 
+}
+
+.header-title-link {
   color: white;
   text-decoration: none;
+  /* Línea separadora elegante entre el logo y el texto */
+  border-left: 2px solid rgba(255, 255, 255, 0.3); 
+  margin-left: 20px;
+  padding-left: 20px;
 }
-.header-logo h1 { margin: 0; font-size: 1.5rem; }
+
+.header-title-link h1 { 
+  margin: 0; 
+  font-size: 1.4rem; 
+  font-weight: 600;
+}
+
+/* GRUPO DERECHO (Botón) */
+.header-right-group {
+  display: flex;
+  align-items: center;
+}
+
+/* BOTÓN CERRAR SESIÓN (Estilo Pastilla con Sombra) */
+.logout-btn-styled {
+  color: #fff;
+  text-decoration: none;
+  font-size: 0.95rem;
+  font-weight: bold;
+  background-color: rgb(253, 174, 83); 
+  padding: 8px 20px;
+  border-radius: 20px; 
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1); 
+  transition: all 0.3s ease; 
+}
+
+.logout-btn-styled:hover {
+  background-color: rgba(255, 255, 255, 0.3); 
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2); 
+  transform: translateY(-1px); 
+}
 
 /* 3. EL CONTENEDOR (Empuja el footer hacia abajo) */
 .container {
-  flex: 1; /* Esto es lo que empuja al footer hacia el fondo */
+  flex: 1; 
   max-width: 1200px;
   margin: 40px auto;
   padding: 0 20px;
@@ -62,7 +112,7 @@ html, body, #root {
   color: white;
   text-align: center;
   padding: 20px 0;
-  margin-top: auto; /* Se alinea al final del flexbox */
+  margin-top: auto; 
 }
 
 /* 5. TARJETAS Y GRID */
@@ -79,18 +129,17 @@ html, body, #root {
   box-shadow: 0 4px 15px rgba(0,0,0,0.05);
   border-left: 6px solid var(--primary-blue);
   display: flex;
-  flex-direction: column; /* Para estructurar el interior de la tarjeta */
+  flex-direction: column; 
 }
 
 .task-title {
   margin: 0 0 15px 0;
   color: var(--primary-blue);
   font-size: 1.3rem;
-  border-bottom: 1px solid #eee; /* Línea separadora sutil */
+  border-bottom: 1px solid #eee; 
   padding-bottom: 10px;
 }
 
-/* Nueva estructura interna de la info */
 .task-details {
   display: flex;
   flex-direction: column;
@@ -105,7 +154,6 @@ html, body, #root {
   gap: 8px;
 }
 
-/* LOS COLORES DE VUELTA */
 .badge {
   padding: 4px 12px;
   border-radius: 20px;
@@ -137,18 +185,17 @@ html, body, #root {
 }
 .btn-icon:hover { background: #f0f0f0; }
 
-/* Colores pastel para los botones de acción */
 .btn-edit {
-  background-color: #e8f4fc; /* Azul pastelito */
+  background-color: #e8f4fc; 
   color: var(--primary-blue);
   border: 1px solid #bce0fd;
 }
 .btn-edit:hover {
-  background-color: #d1ebfe; /* Un pelín más oscuro al pasar el ratón */
+  background-color: #d1ebfe; 
 }
 
 .btn-delete {
-  background-color: #fbebed; /* Rojo pastelito */
+  background-color: #fbebed; 
   color: #c92a2a;
   border: 1px solid #f5c2c7;
 }
@@ -164,6 +211,73 @@ html, body, #root {
   border-radius: 8px;
   font-weight: bold;
   cursor: pointer;
+  text-decoration: none; /* Añadido para que el Link parezca un botón sin subrayado */
+  display: inline-block;
   transition: 0.3s;
 }
 .btn-primary:hover { background-color: var(--gold); }
+
+/* --- ESTILOS PARA FORMULARIOS Y LOGIN --- */
+.auth-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 60vh;
+}
+
+.form-card {
+  background: white;
+  padding: 40px;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+  width: 100%;
+  max-width: 500px;
+  border-top: 5px solid var(--primary-blue);
+  margin: 0 auto;
+}
+
+.form-title {
+  color: var(--primary-blue);
+  text-align: center;
+  margin-bottom: 30px;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 15px;
+}
+
+.main-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-label {
+  font-weight: bold;
+  color: var(--dark-grey);
+}
+
+.form-input {
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+  font-family: inherit;
+  transition: border-color 0.3s;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: var(--primary-blue);
+}
+
+.form-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+  align-items: center;
+}

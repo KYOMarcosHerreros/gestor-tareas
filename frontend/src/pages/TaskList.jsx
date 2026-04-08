@@ -1,5 +1,6 @@
 import React from 'react';
-import TaskCard from '../components/TaskCard'; // ¡Importamos la tarjeta!
+import TaskCard from '../components/TaskCard';
+import { Link } from 'react-router-dom';
 
 function TaskList() {
   const tareasDePrueba = [
@@ -17,7 +18,9 @@ function TaskList() {
     <div>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '30px' }}>
         <h2 style={{ color: '#1E6BA2', margin: 0 }}>Listado de Tareas</h2>
-        <button className="btn-primary">+ Nueva Tarea</button>
+        <Link to="/nueva-tarea" className="btn-primary" style={{ textDecoration: 'none' }}>
+          + Nueva Tarea
+        </Link>
       </div>
 
       <div className="task-list">
