@@ -1,6 +1,6 @@
 using TareasAPI.Models;
 using TareasAPI.Repositories;
-using System.Linq;
+using TareasAPI.Dtos;
 
 namespace TareasAPI.Services
 {
@@ -13,48 +13,28 @@ namespace TareasAPI.Services
             _repository = repository;
         }
 
-        public async Task<IEnumerable<Tarea>> GetAllAsync()
+        public async Task<RespuestaPaginadaDto<Tarea>> ListarTareasPaginadasAsync(int pagina, int tamaño)
         {
-            // Obtenemos todas las tareas del repositorio
-            var tareas = await _repository.GetAllAsync();
+            // Llamamos a tu nuevo repositorio
+            var (datos, total) = await _repository.ObtenerPaginadoAsync(pagina, tamaño);
 
-            // Ordenamos para que las tareas más recientes (por FechaCreacion) salgan primero
-            return tareas.OrderByDescending(t => t.FechaCreacion);
+            // Calculamos cuántas páginas hay en total
+            var totalPaginas = (int)Math.Ceiling((double)total / tamaño);
+
+            return new RespuestaPaginadaDto<Tarea>
+            {
+                Datos = datos,
+                PaginaActual = pagina,
+                TamañoPagina = tamaño,
+                TotalRegistros = total,
+                TotalPaginas = totalPaginas
+            };
         }
 
-        public async Task<Tarea?> GetByIdAsync(int id)
-        {
-            return await _repository.GetByIdAsync(id);
-        }
-
-        public async Task<Tarea> CreateAsync(Tarea tarea)
-        {
-            tarea.FechaCreacion = DateTime.Now;
-
-            tarea.Estado = EstadoTarea.Pendiente;
-
-            // Enviamos la tarea ya preparada al repositorio
-            return await _repository.CreateAsync(tarea);
-        }
-
-        public async Task<Tarea?> UpdateAsync(int id, Tarea tareaEditada)
-        {
-            var tareaEnDb = await _repository.GetByIdAsync(id);
-
-            if (tareaEnDb == null) return null;
-
-            tareaEnDb.Titulo = tareaEditada.Titulo;
-            tareaEnDb.Descripcion = tareaEditada.Descripcion;
-            tareaEnDb.Estado = tareaEditada.Estado;
-            tareaEnDb.Prioridad = tareaEditada.Prioridad;
-            tareaEnDb.FechaLimite = tareaEditada.FechaLimite;
-
-            return await _repository.UpdateAsync(id, tareaEnDb);
-        }
-
-        public async Task<bool> DeleteAsync(int id)
-        {
-            return await _repository.DeleteAsync(id);
-        }
+        // Estos se quedan igual, solo llaman al repositorio
+        public async Task<Tarea?> GetByIdAsync(int id) => await _repository.GetByIdAsync(id);
+        public async Task<Tarea> CreateAsync(Tarea tarea) => await _repository.CreateAsync(tarea);
+        public async Task<Tarea?> UpdateAsync(int id, Tarea tarea) => await _repository.UpdateAsync(id, tarea);
+        public async Task<bool> DeleteAsync(int id) => await _repository.DeleteAsync(id);
     }
 }

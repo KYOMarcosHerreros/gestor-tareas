@@ -2,12 +2,13 @@ using Microsoft.AspNetCore.Mvc;
 using TareasAPI.Models;
 using TareasAPI.Services;
 using Microsoft.AspNetCore.Authorization;
+using TareasAPI.Dtos; // <--- AÑADE ESTO para usar RespuestaPaginadaDto
 
 namespace TareasAPI.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize] 
+    [Authorize]
     public class TareasController : ControllerBase
     {
         private readonly ITareaService _service;
@@ -17,14 +18,19 @@ namespace TareasAPI.Controllers
             _service = service;
         }
 
-        // Todos estos métodos ahora requieren TOKEN obligatoriamente
-
+        // --- ESTE ES EL MÉTODO QUE CAMBIA PARA LA PAGINACIÓN ---
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Tarea>>> GetTareas()
+        public async Task<ActionResult<RespuestaPaginadaDto<Tarea>>> GetTareas([FromQuery] int pagina = 1, [FromQuery] int tamaño = 10)
         {
-            var tareas = await _service.GetAllAsync();
-            return Ok(tareas);
+            // Validaciones sencillas
+            if (pagina < 1) pagina = 1;
+            if (tamaño < 1) tamaño = 10;
+
+            var respuesta = await _service.ListarTareasPaginadasAsync(pagina, tamaño);
+            return Ok(respuesta);
         }
+
+        // Los demás métodos (Get por ID, Post, Put, Delete) se quedan EXACTAMENTE IGUAL
 
         [HttpGet("{id}")]
         public async Task<ActionResult<Tarea>> GetTarea(int id)
