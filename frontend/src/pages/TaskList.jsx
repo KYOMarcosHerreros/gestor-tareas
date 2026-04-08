@@ -1,7 +1,7 @@
 import React from 'react';
+import TaskCard from '../components/TaskCard'; // ¡Importamos la tarjeta!
 
 function TaskList() {
-  // 1. Datos actualizados con las fechas de Marcos
   const tareasDePrueba = [
     { id: 1, titulo: "Hacer la compra", estado: "Pendiente", prioridad: "Alta", fechaCreacion: "07/04/2026", fechaLimite: "09/04/2026" },
     { id: 2, titulo: "Estudiar React", estado: "EnProgreso", prioridad: "Media", fechaCreacion: "05/04/2026", fechaLimite: "15/04/2026" },
@@ -21,37 +21,9 @@ function TaskList() {
       </div>
 
       <div className="task-list">
+        {/* Magia de React: Por cada tarea en la lista, dibuja un componente TaskCard */}
         {tareasDePrueba.map((tarea) => (
-          <div key={tarea.id} className="task-card">
-            
-            {/* Título arriba del todo con línea separadora (gracias al CSS) */}
-            <h3 className="task-title">{tarea.titulo}</h3>
-            
-            {/* Información ordenada */}
-            <div className="task-details">
-              <div className="task-info-row">
-                <span>📅 <strong>Creación:</strong> {tarea.fechaCreacion}</span>
-              </div>
-              <div className="task-info-row">
-                <span>⏰ <strong>Límite:</strong> {tarea.fechaLimite}</span>
-              </div>
-              <div className="task-info-row">
-                <span>📊 <strong>Estado:</strong></span> 
-                <span className={`badge ${tarea.estado}`}>{tarea.estado}</span>
-              </div>
-              <div className="task-info-row">
-                <span>⚡ <strong>Prioridad:</strong></span>
-                <span className={`badge ${tarea.prioridad}`}>{tarea.prioridad}</span>
-              </div>
-            </div>
-
-            {/* Botones abajo y separados */}
-            <div className="task-actions">
-              <button className="btn-icon btn-edit">Editar</button>
-              <button className="btn-icon btn-delete">Borrar</button>
-            </div>
-
-          </div>
+          <TaskCard key={tarea.id} tarea={tarea} />
         ))}
       </div>
     </div>
