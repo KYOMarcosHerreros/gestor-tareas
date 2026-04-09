@@ -31,7 +31,7 @@ html, body, #root {
 }
 
 .header-content {
-  max-width: 1200px;
+  max-width: 1600px;
   margin: 0 auto;
   display: flex;
   justify-content: space-between;
@@ -107,7 +107,7 @@ html, body, #root {
 /* 3. EL CONTENEDOR PRINCIPAL */
 .container {
   flex: 1; 
-  max-width: 1200px;
+  max-width: 1600px;
   margin: 25px auto 40px auto; /* ⬅️ Reducimos el margen superior para acercarlo a la barra */
   padding: 0 20px;
   width: 100%;
@@ -131,7 +131,7 @@ h2 {
 /* 5. TARJETAS Y GRID */
 .task-list {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(450px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
   gap: 25px;
 }
 
@@ -452,4 +452,51 @@ h2 {
 @keyframes fadeOut {
   from { opacity: 1; }
   to { opacity: 0; visibility: hidden; }
+}
+
+/* =========================================
+   📊 DASHBOARD LAYOUT (SIDEBAR + GRID)
+   ========================================= */
+.dashboard-layout {
+  display: flex;
+  gap: 90px;
+  align-items: flex-start;
+}
+
+/* La columna de la izquierda */
+.dashboard-sidebar {
+  flex: 0 0 250px;
+  background-color: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+  border-top: 4px solid var(--primary-blue);
+  position: sticky;
+  top: 120px; 
+}
+
+/* La columna derecha donde van las tareas */
+.main-content {
+  flex: 1; /* Ocupa todo el espacio sobrante */
+}
+
+/* Las cajitas de los contadores */
+.counter-box {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px dashed #eee;
+}
+.counter-box:last-child {
+  border-bottom: none;
+}
+
+.counter-label {
+  font-weight: 500;
+  color: var(--dark-grey);
+}
+
+.counter-number {
+  font-size: 1.1rem;
 }

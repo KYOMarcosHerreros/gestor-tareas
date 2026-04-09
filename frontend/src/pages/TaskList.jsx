@@ -13,6 +13,7 @@ function TaskList() {
   const [modoEdicion, setModoEdicion] = useState(false);
   const [tareaEditada, setTareaEditada] = useState(null);
   const [tareaABorrar, setTareaABorrar] = useState(null);
+  const [filtroActual, setFiltroActual] = useState('Todas');
   
   // --- NUEVOS ESTADOS PARA LA NOTIFICACIÓN ---
   const [notificacion, setNotificacion] = useState({ visible: false, mensaje: '', tipo: '' });
@@ -132,6 +133,17 @@ function TaskList() {
     }
   };
 
+  // 🧮 LÓGICA DE CONTADORES: Filtramos el array y sacamos la longitud
+  const tareasPendientes = tareas.filter(t => t.estado === 'Pendiente').length;
+  const tareasEnProgreso = tareas.filter(t => t.estado === 'EnProgreso').length;
+  const tareasCompletadas = tareas.filter(t => t.estado === 'Completada').length;
+
+  // 🎯 LA MAGIA DEL FILTRADO (NUEVO)
+  // Si el filtro es 'Todas', mostramos la lista entera. Si no, filtramos por el estado.
+  const tareasFiltradas = filtroActual === 'Todas' 
+    ? tareas 
+    : tareas.filter(tarea => tarea.estado === filtroActual);
+
   return (
     <div>
       {/* 🌟 LA NOTIFICACIÓN FLOTANTE MÁGICA 🌟 */}
@@ -155,12 +167,100 @@ function TaskList() {
         <p style={{ textAlign: 'center', color: '#888' }}>No hay tareas todavía. ¡Crea la primera!</p>
       )}
 
-      <div className="task-list">
-        {tareas.map((tarea) => (
-          <div key={tarea.id} onClick={() => abrirModal(tarea)} style={{ cursor: 'pointer' }}>
-            <TaskCard tarea={tarea} onBorrar={(t) => setTareaABorrar(t)} />
+      {/* ==============================================
+          📊 NUEVO LAYOUT: SIDEBAR IZQUIERDO + TAREAS
+          ============================================== */}
+      <div className="dashboard-layout">
+        
+        {/* COLUMNA IZQUIERDA: LOS CONTADORES (AHORA SON FILTROS) */}
+        <aside className="dashboard-sidebar">
+          <h3 style={{ marginTop: 0, color: '#334155', borderBottom: '2px solid #eee', paddingBottom: '10px' }}>
+             Resumen
+          </h3>
+          
+          <div 
+            className="counter-box" 
+            onClick={() => setFiltroActual('Pendiente')}
+            style={{ cursor: 'pointer', opacity: filtroActual === 'Pendiente' ? 1 : 0.6 }}
+          >
+            <span className="counter-label" style={{ fontWeight: filtroActual === 'Pendiente' ? 'bold' : '500' }}>
+              {filtroActual === 'Pendiente' ? '▶ ' : ''}Pendientes
+            </span>
+            <span className="counter-number badge Pendiente">{tareasPendientes}</span>
           </div>
-        ))}
+          
+          <div 
+            className="counter-box" 
+            onClick={() => setFiltroActual('EnProgreso')}
+            style={{ cursor: 'pointer', opacity: filtroActual === 'EnProgreso' ? 1 : 0.6 }}
+          >
+            <span className="counter-label" style={{ fontWeight: filtroActual === 'EnProgreso' ? 'bold' : '500' }}>
+              {filtroActual === 'EnProgreso' ? '▶ ' : ''}En Progreso
+            </span>
+            <span className="counter-number badge EnProgreso">{tareasEnProgreso}</span>
+          </div>
+          
+          <div 
+            className="counter-box" 
+            onClick={() => setFiltroActual('Completada')}
+            style={{ cursor: 'pointer', opacity: filtroActual === 'Completada' ? 1 : 0.6 }}
+          >
+            <span className="counter-label" style={{ fontWeight: filtroActual === 'Completada' ? 'bold' : '500' }}>
+              {filtroActual === 'Completada' ? '▶ ' : ''}Completadas
+            </span>
+            <span className="counter-number badge Completada">{tareasCompletadas}</span>
+          </div>
+          
+          <div 
+            className="counter-box" 
+            onClick={() => setFiltroActual('Todas')}
+            style={{ cursor: 'pointer', marginTop: '10px', borderTop: '2px solid #eee', paddingTop: '15px', opacity: filtroActual === 'Todas' ? 1 : 0.6 }}
+          >
+            <span className="counter-label" style={{ fontWeight: 'bold', color: 'var(--primary-blue)' }}>
+              {filtroActual === 'Todas' ? '▶ ' : ''}Total Tareas
+            </span>
+            <span className="counter-number" style={{ fontWeight: 'bold', color: 'var(--primary-blue)' }}>
+              {tareas.length}
+            </span>
+          </div>
+
+          {/* 💡 EL NUEVO MICROTEXTO FLOTANTE DE AYUDA */}
+          <p style={{
+            position: 'absolute',
+            bottom: '-35px', /* Lo empuja fuera de la caja blanca hacia abajo */
+            left: 0,
+            width: '100%',
+            textAlign: 'center',
+            fontSize: '0.8rem',
+            color: '#94a3b8', /* Un gris azulado muy suave y elegante */
+            margin: 0
+          }}>
+             Haz clic en una sección para filtrar
+          </p>
+
+        </aside>
+
+        {/* COLUMNA DERECHA: LA LISTA DE TARJETAS */}
+        <div className="main-content">
+          <div className="task-list">
+            
+            {/* Si no hay tareas en ese filtro, mostramos un mensaje amigable */}
+            {tareasFiltradas.length === 0 && (
+              <p style={{ gridColumn: '1 / -1', textAlign: 'center', color: '#888', padding: '40px 0' }}>
+                No tienes ninguna tarea en este estado. ¡Buen trabajo! 🎉
+              </p>
+            )}
+
+            {/* 👇 USAMOS tareasFiltradas EN LUGAR DE tareas 👇 */}
+            {tareasFiltradas.map((tarea) => (
+              <div key={tarea.id} onClick={() => abrirModal(tarea)} style={{ cursor: 'pointer' }}>
+                <TaskCard tarea={tarea} onBorrar={(t) => setTareaABorrar(t)} />
+              </div>
+            ))}
+
+          </div>
+        </div>
+
       </div>
 
       {/* POP-UP AZUL: DETALLES Y EDICIÓN */}
