@@ -23,7 +23,7 @@ function Header() {
  
         {/* GRUPO IZQUIERDO: Logo de Kyocera + Título */}
 <div className="header-left-group">
-<a href="https://www.kyocera.es/" target="_blank" rel="noopener noreferrer" title="Ir a la web de Kyocera">
+<a href="https://spain.kyocera.com/" target="_blank" rel="noopener noreferrer" title="Ir a la web de Kyocera">
 <img src={logoKyocera} alt="Logo Kyocera" className="header-kyocera-logo" />
 </a>
  

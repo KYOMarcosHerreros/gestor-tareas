@@ -19,11 +19,11 @@ html, body, #root {
   min-height: 100vh;
 }
 
-/* 2. HEADER PEGADO ARRIBA (¡Esta es la clase que se había borrado!) */
+/* 2. HEADER PEGADO ARRIBA (¡Header compacto!) */
 .main-header {
   background-color: var(--primary-blue);
   color: white;
-  padding: 15px 0;
+  padding: 10px 0; /* ⬅️ Reducido para afinar la barra */
   box-shadow: 0 4px 12px rgba(0,0,0,0.15);
   position: sticky; 
   top: 0; 
@@ -35,7 +35,7 @@ html, body, #root {
   margin: 0 auto;
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: center; /* ⬅️ Esto centra mágicamente todo en vertical */
   padding: 0 20px;
 }
 
@@ -46,7 +46,8 @@ html, body, #root {
 }
 
 .header-kyocera-logo {
-  height: 40px; 
+  margin-top: 10px;
+  height: 55px;  
   cursor: pointer;
   transition: opacity 0.2s;
 }
@@ -58,7 +59,6 @@ html, body, #root {
 .header-title-link {
   color: white;
   text-decoration: none;
-  /* Línea separadora elegante entre el logo y el texto */
   border-left: 2px solid rgba(255, 255, 255, 0.3); 
   margin-left: 20px;
   padding-left: 20px;
@@ -74,18 +74,17 @@ html, body, #root {
 .header-right-group {
   display: flex;
   align-items: center;
-  gap: 20px; /* <--- ESTA ES LA MAGIA: 20 píxeles de separación entre el texto y el botón */
+  gap: 20px; 
 }
 
-/* ESTILO DEL TEXTO DEL USUARIO */
 .header-username {
-  color: white; /* Letra blanca para que contraste */
-  font-size: 0.95rem; /* Tamaño elegante */
-  font-weight: 500; /* Un poco de grosor, pero sin ser negrita del todo */
-  opacity: 0.9; /* Un pelín transparente para que el botón destaque más */
+  color: white; 
+  font-size: 0.95rem; 
+  font-weight: 500; 
+  opacity: 0.9; 
 }
 
-/* BOTÓN CERRAR SESIÓN (Estilo Pastilla con Sombra) */
+/* BOTÓN CERRAR SESIÓN */
 .logout-btn-styled {
   color: #fff;
   text-decoration: none;
@@ -105,14 +104,19 @@ html, body, #root {
   transform: translateY(-1px); 
 }
 
-/* 3. EL CONTENEDOR (Empuja el footer hacia abajo) */
+/* 3. EL CONTENEDOR PRINCIPAL */
 .container {
   flex: 1; 
   max-width: 1200px;
-  margin: 40px auto;
+  margin: 25px auto 40px auto; /* ⬅️ Reducimos el margen superior para acercarlo a la barra */
   padding: 0 20px;
   width: 100%;
   box-sizing: border-box;
+}
+
+/* 🛑 ¡EL FRANCOTIRADOR DE SCROLL INVISIBLE! 🛑 */
+h2 {
+  margin-top: 0;
 }
 
 /* 4. FOOTER */
@@ -220,7 +224,7 @@ html, body, #root {
   border-radius: 8px;
   font-weight: bold;
   cursor: pointer;
-  text-decoration: none; /* Añadido para que el Link parezca un botón sin subrayado */
+  text-decoration: none; 
   display: inline-block;
   transition: 0.3s;
 }
@@ -302,18 +306,17 @@ html, body, #root {
 }
 
 .alert-error {
-  background-color: #fee2e2; /* Fondo rojo clarito */
-  color: #dc2626; /* Texto rojo oscuro */
+  background-color: #fee2e2; 
+  color: #dc2626; 
   border: 1px solid #f87171;
 }
 
 .alert-success {
-  background-color: #dcfce7; /* Fondo verde clarito */
-  color: #16a34a; /* Texto verde oscuro */
+  background-color: #dcfce7; 
+  color: #16a34a; 
   border: 1px solid #86efac;
 }
 
-/* Animación suave para que el mensaje aparezca de la nada */
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(-10px); }
   to { opacity: 1; transform: translateY(0); }
@@ -331,20 +334,17 @@ html, body, #root {
   color: var(--primary-blue);
   font-weight: bold;
   text-decoration: none;
-  transition: color 0.2s ease; /* Pequeña transición para cuando pasas el ratón */
+  transition: color 0.2s ease; 
 }
 
 .auth-footer-link:hover {
-  color: #154c79; /* Un azul un poco más oscuro al pasar el ratón */
+  color: #154c79; 
   text-decoration: underline;
 }
-
 
 /* =========================================
    🪄 MAGIA DEL POP-UP (MODAL DE DETALLES)
    ========================================= */
-
-/* El fondo oscuro que difumina la pantalla de atrás */
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -352,15 +352,14 @@ html, body, #root {
   width: 100vw;
   height: 100vh;
   background-color: rgba(0, 0, 0, 0.4);
-  backdrop-filter: blur(4px); /* El toque profesional: difumina el fondo */
+  backdrop-filter: blur(4px); 
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1000; /* Para que esté por encima de TODO */
+  z-index: 1000; 
   animation: fadeIn 0.2s ease-in-out;
 }
 
-/* La tarjeta blanca en sí */
 .modal-content {
   background-color: white;
   padding: 30px;
@@ -368,10 +367,9 @@ html, body, #root {
   width: 90%;
   max-width: 550px;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-  animation: slideUp 0.3s ease-out; /* Animación de entrada */
+  animation: slideUp 0.3s ease-out; 
 }
 
-/* Título de la tarjeta flotante */
 .modal-header {
   color: var(--primary-blue);
   margin-top: 0;
@@ -381,7 +379,6 @@ html, body, #root {
   font-size: 1.5rem;
 }
 
-/* La caja donde va la descripción larga */
 .modal-description-box {
   background-color: #f8fafc;
   border-left: 4px solid var(--primary-blue);
@@ -389,13 +386,12 @@ html, body, #root {
   border-radius: 0 8px 8px 0;
   margin-bottom: 25px;
   color: #334155;
-  white-space: pre-wrap; /* Respeta los saltos de línea del usuario */
+  white-space: pre-wrap; 
   line-height: 1.6;
   word-break: break-word; 
   overflow-wrap: break-word;
 }
 
-/* Cuadrícula para los datos de abajo (Estado, Fecha, etc.) */
 .modal-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -420,7 +416,6 @@ html, body, #root {
   margin-bottom: 5px;
 }
 
-/* Animaciones suaves */
 @keyframes slideUp {
   from { opacity: 0; transform: translateY(20px); }
   to { opacity: 1; transform: translateY(0); }
@@ -431,22 +426,19 @@ html, body, #root {
    ========================================= */
 .toast-notification {
   position: fixed;
-  top: 20px; /* Separación desde el techo */
+  top: 20px; 
   left: 50%;
-  transform: translateX(-50%); /* Truco maestro para centrarlo exactamente en el medio */
-  background-color: #10b981; /* Un verde de "éxito" profesional */
+  transform: translateX(-50%); 
+  background-color: #10b981; 
   color: white;
   padding: 12px 24px;
   border-radius: 8px;
   box-shadow: 0 10px 25px rgba(16, 185, 129, 0.4);
   font-weight: bold;
-  z-index: 9999; /* Por encima de CUALQUIER cosa */
-  
-  /* Entra en 0.4s, y se esfuma a los 2.6s (Total 3 segundos) */
+  z-index: 9999; 
   animation: slideDownFade 0.4s ease-out, fadeOut 0.4s ease-in 2.6s forwards;
 }
 
-/* Variante roja para cuando borramos algo */
 .toast-error {
   background-color: #e11d48;
   box-shadow: 0 10px 25px rgba(225, 29, 72, 0.4);
