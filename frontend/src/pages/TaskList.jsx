@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import TaskCard from '../components/TaskCard';
-import { Link } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 const API_URL = 'https://unsocialized-unstalemated-corie.ngrok-free.dev';
 
@@ -12,6 +12,21 @@ function TaskList() {
   const [tareaSeleccionada, setTareaSeleccionada] = useState(null);
   const [modoEdicion, setModoEdicion] = useState(false);
   const [tareaEditada, setTareaEditada] = useState(null);
+  const [tareaABorrar, setTareaABorrar] = useState(null);
+  
+  // --- NUEVOS ESTADOS PARA LA NOTIFICACIÓN ---
+  const [notificacion, setNotificacion] = useState({ visible: false, mensaje: '', tipo: '' });
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  // Función genérica para disparar la notificación de arriba
+  const mostrarNotificacion = (mensaje, tipo = 'success') => {
+    setNotificacion({ visible: true, mensaje, tipo });
+    // A los 3 segundos, la ocultamos
+    setTimeout(() => {
+      setNotificacion({ visible: false, mensaje: '', tipo: '' });
+    }, 3000);
+  };
 
   const fetchTareas = async () => {
     try {
@@ -24,10 +39,6 @@ function TaskList() {
       });
       if (response.ok) {
         const data = await response.json();
-        
-        // 🚨 EL CHIVATO: Imprimimos en consola lo que nos manda Marcos
-        console.log("📦 DATOS RECIBIDOS DEL BACKEND:", data.datos); 
-        
         setTareas(data.datos);
       } else if (response.status === 401) {
         setError('Sesión expirada, vuelve a iniciar sesión');
@@ -43,7 +54,14 @@ function TaskList() {
 
   useEffect(() => {
     fetchTareas();
-  }, []);
+
+    // 🚨 REVISAMOS SI VENIMOS DE CREAR UNA TAREA (El paquete oculto)
+    if (location.state && location.state.mensajeExito) {
+      mostrarNotificacion(location.state.mensajeExito, 'success');
+      // Limpiamos el viaje para que si recarga la página con F5 no vuelva a salir la alerta
+      navigate('.', { replace: true, state: {} });
+    }
+  }, [location, navigate]);
 
   const abrirModal = (tarea) => {
     setTareaSeleccionada(tarea);
@@ -55,68 +73,74 @@ function TaskList() {
     setModoEdicion(true);
   };
 
- const guardarEdicion = async () => {
-
+  const guardarEdicion = async () => {
     try {
-
       const token = localStorage.getItem('token');
-
-      // Comparamos solo la parte de la fecha (YYYY-MM-DD) para evitar errores de formato
-
       const fechaOriginal = tareaSeleccionada.fechaLimite?.split('T')[0];
-
       const fechaNueva = tareaEditada.fechaLimite?.split('T')[0];
-
       const copiaTarea = { ...tareaEditada };
- 
+
       if (fechaOriginal !== fechaNueva) {
-
         copiaTarea.fechaModificada = true;
-
       }
- 
+
       const response = await fetch(`${API_URL}/api/tareas/${copiaTarea.id}`, {
-
         method: 'PUT',
-
         headers: {
-
           'Content-Type': 'application/json',
-
           'Authorization': `Bearer ${token}`,
-
           'ngrok-skip-browser-warning': 'true'
-
         },
-
-        body: JSON.stringify(copiaTarea), // Enviamos la copia con el flag actualizado
-
+        body: JSON.stringify(copiaTarea), 
       });
- 
+
       if (response.ok) {
-
-        await fetchTareas(); // Refrescamos la lista del servidor
-
-        setTareaSeleccionada(null); // Cerramos el modal para ver el cambio en la lista
-
+        await fetchTareas(); 
+        setTareaSeleccionada(null); 
         setModoEdicion(false);
-
+        // 🔥 Lanza la notificación de edición
+        mostrarNotificacion('Cambios guardados correctamente', 'success');
       } else {
-
         alert("Hubo un error al guardar los cambios en el servidor.");
-
       }
-
     } catch (err) {
-
       alert("Error de conexión al intentar guardar.");
-
     }
+  };
 
+  const ejecutarBorrado = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await fetch(`${API_URL}/api/tareas/${tareaABorrar.id}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'ngrok-skip-browser-warning': 'true'
+        }
+      });
+
+      if (response.ok) {
+        setTareaABorrar(null); 
+        fetchTareas(); 
+        // 🔥 Lanza la notificación de borrado (en color rojo)
+        mostrarNotificacion('Tarea eliminada', 'error');
+      } else {
+        alert("Hubo un error al intentar borrar la tarea.");
+      }
+    } catch (err) {
+      alert("Error de conexión al intentar borrar.");
+    }
   };
 
   return (
     <div>
+      {/* 🌟 LA NOTIFICACIÓN FLOTANTE MÁGICA 🌟 */}
+      {notificacion.visible && (
+        <div className={`toast-notification ${notificacion.tipo === 'error' ? 'toast-error' : ''}`}>
+          {notificacion.mensaje}
+        </div>
+      )}
+
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '30px' }}>
         <h2 style={{ color: '#1E6BA2', margin: 0 }}>Listado de Tareas</h2>
         <Link to="/nueva-tarea" className="btn-primary" style={{ textDecoration: 'none' }}>
@@ -134,21 +158,20 @@ function TaskList() {
       <div className="task-list">
         {tareas.map((tarea) => (
           <div key={tarea.id} onClick={() => abrirModal(tarea)} style={{ cursor: 'pointer' }}>
-            <TaskCard tarea={tarea} />
+            <TaskCard tarea={tarea} onBorrar={(t) => setTareaABorrar(t)} />
           </div>
         ))}
       </div>
 
+      {/* POP-UP AZUL: DETALLES Y EDICIÓN */}
       {tareaSeleccionada && (
         <div className="modal-overlay" onClick={() => setTareaSeleccionada(null)}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
             
-            {/* Título centrado para equilibrar el diseño */}
             <h2 className="modal-header" style={{ textAlign: 'center' }}>
               {tareaSeleccionada.titulo}
             </h2>
 
-            {/* ZONA DINÁMICA: ¿Editando o Viendo? */}
             {modoEdicion ? (
               <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', marginBottom: '25px', marginTop: '15px' }}>
                 <div className="form-group" style={{ marginBottom: 0 }}>
@@ -156,12 +179,11 @@ function TaskList() {
                   <textarea 
                     className="form-input" 
                     rows="6"
-                    maxLength="500" // Límite de HTML
+                    maxLength="500"
                     style={{ width: '100%', boxSizing: 'border-box', resize: 'vertical', fontFamily: 'inherit', padding: '12px' }}
                     value={tareaEditada.descripcion || ''} 
                     onChange={(e) => setTareaEditada({...tareaEditada, descripcion: e.target.value})} 
                   />
-                  {/* El contador de caracteres */}
                   <div style={{ textAlign: 'right', fontSize: '0.8rem', color: 'var(--dark-grey)', marginTop: '4px' }}>
                     {(tareaEditada.descripcion || '').length} / 500
                   </div>
@@ -251,7 +273,6 @@ function TaskList() {
               </>
             )}
 
-            {/* BOTONERA: Centrada para mayor armonía visual */}
             <div style={{ display: 'flex', justifyContent: 'center', gap: '15px', marginTop: '20px' }}>
               {modoEdicion ? (
                 <>
@@ -266,6 +287,34 @@ function TaskList() {
               )}
             </div>
 
+          </div>
+        </div>
+      )}
+
+      {/* POP-UP ROJO DE CONFIRMACIÓN DE BORRADO */}
+      {tareaABorrar && (
+        <div className="modal-overlay" onClick={() => setTareaABorrar(null)}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()} style={{ maxWidth: '400px', textAlign: 'center' }}>
+            <h2 style={{ color: '#e11d48', marginTop: 0, fontSize: '1.5rem' }}>⚠️ Confirmar Borrado</h2>
+            <p style={{ fontSize: '1rem', color: '#334155', margin: '20px 0' }}>
+              ¿Estás seguro de que quieres eliminar la tarea <br/>
+              <strong>"{tareaABorrar.titulo}"</strong>?
+            </p>
+            <p style={{ fontSize: '0.85rem', color: '#64748b', marginBottom: '25px' }}>
+              Esta acción no se puede deshacer.
+            </p>
+            <div style={{ display: 'flex', justifyContent: 'center', gap: '15px' }}>
+              <button className="btn-icon" onClick={() => setTareaABorrar(null)}>
+                Cancelar
+              </button>
+              <button 
+                className="btn-primary" 
+                style={{ backgroundColor: '#e11d48', border: 'none' }} 
+                onClick={ejecutarBorrado}
+              >
+                Sí, Borrar Tarea
+              </button>
+            </div>
           </div>
         </div>
       )}

@@ -425,3 +425,39 @@ html, body, #root {
   from { opacity: 0; transform: translateY(20px); }
   to { opacity: 1; transform: translateY(0); }
 }
+
+/* =========================================
+   🔔 NOTIFICACIONES FLOTANTES (TOAST)
+   ========================================= */
+.toast-notification {
+  position: fixed;
+  top: 20px; /* Separación desde el techo */
+  left: 50%;
+  transform: translateX(-50%); /* Truco maestro para centrarlo exactamente en el medio */
+  background-color: #10b981; /* Un verde de "éxito" profesional */
+  color: white;
+  padding: 12px 24px;
+  border-radius: 8px;
+  box-shadow: 0 10px 25px rgba(16, 185, 129, 0.4);
+  font-weight: bold;
+  z-index: 9999; /* Por encima de CUALQUIER cosa */
+  
+  /* Entra en 0.4s, y se esfuma a los 2.6s (Total 3 segundos) */
+  animation: slideDownFade 0.4s ease-out, fadeOut 0.4s ease-in 2.6s forwards;
+}
+
+/* Variante roja para cuando borramos algo */
+.toast-error {
+  background-color: #e11d48;
+  box-shadow: 0 10px 25px rgba(225, 29, 72, 0.4);
+}
+
+@keyframes slideDownFade {
+  from { top: -50px; opacity: 0; }
+  to { top: 20px; opacity: 1; }
+}
+
+@keyframes fadeOut {
+  from { opacity: 1; }
+  to { opacity: 0; visibility: hidden; }
+}

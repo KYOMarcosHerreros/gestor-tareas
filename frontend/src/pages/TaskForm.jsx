@@ -10,7 +10,7 @@ function TaskForm() {
   const [titulo, setTitulo] = useState('');
   const [prioridad, setPrioridad] = useState('Baja');
   const [fechaLimite, setFechaLimite] = useState('');
-  const [descripcion, setDescripcion] = useState(''); // <-- 1. NUEVO ESTADO
+  const [descripcion, setDescripcion] = useState('');
   const [error, setError] = useState('');
 
   const handleSubmit = async (e) => {
@@ -40,7 +40,9 @@ function TaskForm() {
       });
 
       if (response.ok) {
-        navigate('/'); 
+        // 🔥 ESTE ES EL CAMBIO MÁGICO 🔥
+        // Volvemos a la lista, pero le mandamos un mensaje oculto en la mochila
+        navigate('/', { state: { mensajeExito: 'Nueva tarea creada con éxito' } }); 
       } else {
         const data = await response.json();
         setError(data.message || 'Error al guardar la tarea. Revisa los datos.');
@@ -97,7 +99,6 @@ function TaskForm() {
           />
         </div>
 
-        {/* 3. NUEVO CAMPO: LA DESCRIPCIÓN CON TEXTAREA */}
         <div className="form-group">
           <label className="form-label">Descripción (Opcional)</label>
           <textarea 
@@ -106,10 +107,9 @@ function TaskForm() {
             value={descripcion}
             onChange={(e) => setDescripcion(e.target.value)}
             maxLength="500"
-            rows="4" /* Lo hace más alto que un input normal */
-            style={{ resize: 'vertical', fontFamily: 'inherit' }} /* Permite al usuario estirarlo solo hacia abajo */
+            rows="4" 
+            style={{ resize: 'vertical', fontFamily: 'inherit' }} 
           />
-          {/* Contador de caracteres dinámico */}
           <div style={{ textAlign: 'right', fontSize: '0.8rem', color: 'var(--dark-grey)', marginTop: '4px' }}>
             {descripcion.length} / 500
           </div>
