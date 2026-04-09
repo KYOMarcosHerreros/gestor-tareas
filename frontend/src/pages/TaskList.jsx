@@ -24,6 +24,10 @@ function TaskList() {
       });
       if (response.ok) {
         const data = await response.json();
+        
+        // 🚨 EL CHIVATO: Imprimimos en consola lo que nos manda Marcos
+        console.log("📦 DATOS RECIBIDOS DEL BACKEND:", data.datos); 
+        
         setTareas(data.datos);
       } else if (response.status === 401) {
         setError('Sesión expirada, vuelve a iniciar sesión');
@@ -51,35 +55,64 @@ function TaskList() {
     setModoEdicion(true);
   };
 
-  const guardarEdicion = async () => {
+ const guardarEdicion = async () => {
+
     try {
+
       const token = localStorage.getItem('token');
-      
-      const fechaCambiada = tareaSeleccionada.fechaLimite !== tareaEditada.fechaLimite;
-      if (fechaCambiada) {
-        tareaEditada.fechaModificada = true; 
-      }
 
-      const response = await fetch(`${API_URL}/api/tareas/${tareaEditada.id}`, {
+      // Comparamos solo la parte de la fecha (YYYY-MM-DD) para evitar errores de formato
+
+      const fechaOriginal = tareaSeleccionada.fechaLimite?.split('T')[0];
+
+      const fechaNueva = tareaEditada.fechaLimite?.split('T')[0];
+
+      const copiaTarea = { ...tareaEditada };
+ 
+      if (fechaOriginal !== fechaNueva) {
+
+        copiaTarea.fechaModificada = true;
+
+      }
+ 
+      const response = await fetch(`${API_URL}/api/tareas/${copiaTarea.id}`, {
+
         method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
-          'ngrok-skip-browser-warning': 'true'
-        },
-        body: JSON.stringify(tareaEditada),
-      });
 
+        headers: {
+
+          'Content-Type': 'application/json',
+
+          'Authorization': `Bearer ${token}`,
+
+          'ngrok-skip-browser-warning': 'true'
+
+        },
+
+        body: JSON.stringify(copiaTarea), // Enviamos la copia con el flag actualizado
+
+      });
+ 
       if (response.ok) {
-        fetchTareas();
-        setTareaSeleccionada(tareaEditada);
+
+        await fetchTareas(); // Refrescamos la lista del servidor
+
+        setTareaSeleccionada(null); // Cerramos el modal para ver el cambio en la lista
+
         setModoEdicion(false);
+
       } else {
+
         alert("Hubo un error al guardar los cambios en el servidor.");
+
       }
+
     } catch (err) {
+
       alert("Error de conexión al intentar guardar.");
+
     }
+
   };
 
   return (
@@ -195,14 +228,23 @@ function TaskList() {
                   </div>
                   <div>
                     <strong>Fecha Límite</strong>
-                    <p style={{ color: '#0f172a', fontWeight: '500' }}>
+                    <p style={{ color: '#0f172a', fontWeight: '500', display: 'flex', alignItems: 'center', gap: '8px' }}>
                       {tareaSeleccionada.fechaLimite ? new Date(tareaSeleccionada.fechaLimite).toLocaleDateString('es-ES') : 'Sin fecha'}
+                      
+                      {tareaSeleccionada.fechaModificada && (
+                        <span style={{ fontSize: '0.75rem', color: '#d97706', backgroundColor: '#fef3c7', padding: '2px 8px', borderRadius: '12px', fontWeight: 'bold' }}>
+                          (Modificada)
+                        </span>
+                      )}
                     </p>
                   </div>
                   <div>
                     <strong>Fecha de Creación</strong>
                     <p style={{ color: '#0f172a', fontWeight: '500' }}>
-                      {new Date(tareaSeleccionada.fechaCreacion).toLocaleDateString('es-ES')}
+                      {new Date(tareaSeleccionada.fechaCreacion).toLocaleString('es-ES', { 
+                        day: '2-digit', month: '2-digit', year: 'numeric', 
+                        hour: '2-digit', minute: '2-digit' 
+                      })}
                     </p>
                   </div>
                 </div>
