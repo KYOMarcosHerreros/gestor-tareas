@@ -88,6 +88,7 @@ var app = builder.Build();
 app.UseSwagger();
 app.UseSwaggerUI();
 
+app.UseDeveloperExceptionPage(); // Esto hará que el error 500 te dé detalles en la respuesta
 app.UseHttpsRedirection();
 
 app.UseCors();

@@ -13,10 +13,8 @@ namespace TareasAPI.Repositories
             _context = context;
         }
 
-        // Este es el método que suele dar error si la interfaz no coincide
         public async Task<(IEnumerable<Tarea> datos, int total)> ObtenerPaginadoAsync(int numeroPagina, int tamañoPagina, int usuarioId)
         {
-            // Filtramos por UsuarioId antes de contar y antes de paginar
             var consulta = _context.Tareas
                 .Where(t => t.UsuarioId == usuarioId)
                 .AsQueryable();
@@ -45,10 +43,26 @@ namespace TareasAPI.Repositories
 
         public async Task<Tarea?> UpdateAsync(int id, Tarea tarea)
         {
-            // Aquí usamos TryUpdate para evitar errores de rastreo si es necesario, 
-            _context.Entry(tarea).State = EntityState.Modified;
+            // Buscamos la tarea real que está en la base de datos
+            var tareaExistente = await _context.Tareas.FindAsync(id);
+
+            if (tareaExistente == null) return null;
+
+            // Actualizamos solo los campos que pueden cambiar.
+            // Ignoramos el UsuarioId que viene del Front para evitar errores 500
+            // si el cliente no lo envía o envía un 0.
+            tareaExistente.Titulo = tarea.Titulo;
+            tareaExistente.Descripcion = tarea.Descripcion;
+            tareaExistente.Estado = tarea.Estado;
+            tareaExistente.Prioridad = tarea.Prioridad;
+            tareaExistente.FechaLimite = tarea.FechaLimite;
+            tareaExistente.FechaModificada = tarea.FechaModificada;
+
+            // Mantenemos el UsuarioId original por seguridad
+            // tareaExistente.UsuarioId = tareaExistente.UsuarioId;
+
             await _context.SaveChangesAsync();
-            return tarea;
+            return tareaExistente;
         }
 
         public async Task<bool> DeleteAsync(int id)
