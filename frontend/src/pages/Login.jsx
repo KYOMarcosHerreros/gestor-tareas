@@ -7,29 +7,49 @@ import { useNavigate, Link } from 'react-router-dom';
 const API_URL = 'https://unsocialized-unstalemated-corie.ngrok-free.dev';
  
 function Login() {
+
   const [email, setEmail] = useState(''); // Lo usamos como username
+
   const [password, setPassword] = useState('');
+
   const [error, setError] = useState('');
+
   const navigate = useNavigate();
+ 
   const handleSubmit = async (e) => {
 
     e.preventDefault();
+
     setError('');
+ 
     try {
+
       const response = await fetch(`${API_URL}/api/auth/login`, {
+
         method: 'POST',
+
         headers: {
+
           'Content-Type': 'application/json',
+
           // Header necesario para que ngrok no bloquee la petición
+
           'ngrok-skip-browser-warning': 'true',
+
         },
 
         body: JSON.stringify({
+
           // IMPORTANTE: Tu Backend (UsuarioDto) espera "username"
+
           // Pasamos el estado 'email' a la propiedad 'username'
+
           username: email, 
+
           password: password,
+
         }),
+
       });
  
       if (response.ok) {
@@ -40,7 +60,7 @@ function Login() {
  
         // Guardamos el token en el almacenamiento local del navegador
 
-        sessionStorage.setItem('token', token);
+        localStorage.setItem('token', token);
  
         // Si el login es correcto, navegamos a la raíz (donde están las tareas)
 
@@ -121,18 +141,31 @@ function Login() {
 </div>
  
           <button
+
             type="submit"
+
             className="btn-primary"
+
             style={{ 
+
               marginTop: '10px', 
+
               width: '100%', 
+
               border: 'none', 
+
               cursor: 'pointer',
+
               padding: '12px',
+
               borderRadius: '4px',
+
               backgroundColor: '#0056b3',
+
               color: 'white',
+
               fontWeight: 'bold'
+
             }}
 >
 
@@ -146,6 +179,7 @@ function Login() {
 </form>
 </div>
 </div>
+
   );
 
 }

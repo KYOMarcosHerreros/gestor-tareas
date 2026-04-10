@@ -1,6 +1,6 @@
 // Decodifica el token JWT y devuelve el nombre del usuario
 export function getUsuarioActual() {
-  const token = sessionStorage.getItem('token');
+  const token = localStorage.getItem('token');
   if (!token) return null;
  
   try {
@@ -17,5 +17,5 @@ export function getUsuarioActual() {
  
 // Cierra la sesión borrando el token
 export function logout() {
-  sessionStorage.removeItem('token');
+  localStorage.removeItem('token');
 }

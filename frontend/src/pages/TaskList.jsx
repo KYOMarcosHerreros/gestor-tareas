@@ -31,7 +31,7 @@ function TaskList() {
 
   const fetchTareas = async () => {
     try {
-      const token = sessionStorage.getItem('token');
+      const token = localStorage.getItem('token');
       const response = await fetch(`${API_URL}/api/tareas`, {
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -53,17 +53,7 @@ function TaskList() {
     }
   };
 
-  // 🛑 AQUÍ ESTÁ EL USE EFFECT CON EL PORTERO 🛑
   useEffect(() => {
-    const token = sessionStorage.getItem('token');
-    
-    // Si no hay token, lo mandamos al login y no hacemos nada más
-    if (!token) {
-      navigate('/login');
-      return; 
-    }
-
-    // Si sí hay token, cargamos las tareas
     fetchTareas();
 
     // 🚨 REVISAMOS SI VENIMOS DE CREAR UNA TAREA (El paquete oculto)
@@ -72,7 +62,6 @@ function TaskList() {
       // Limpiamos el viaje para que si recarga la página con F5 no vuelva a salir la alerta
       navigate('.', { replace: true, state: {} });
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location, navigate]);
 
   const abrirModal = (tarea) => {
@@ -87,8 +76,7 @@ function TaskList() {
 
   const guardarEdicion = async () => {
     try {
-      // 🔥 CORREGIDO: Ahora usa sessionStorage en vez de localStorage
-      const token = sessionStorage.getItem('token');
+      const token = localStorage.getItem('token');
       const fechaOriginal = tareaSeleccionada.fechaLimite?.split('T')[0];
       const fechaNueva = tareaEditada.fechaLimite?.split('T')[0];
       const copiaTarea = { ...tareaEditada };
@@ -111,6 +99,7 @@ function TaskList() {
         await fetchTareas(); 
         setTareaSeleccionada(null); 
         setModoEdicion(false);
+        // 🔥 Lanza la notificación de edición
         mostrarNotificacion('Cambios guardados correctamente', 'success');
       } else {
         alert("Hubo un error al guardar los cambios en el servidor.");
@@ -122,8 +111,7 @@ function TaskList() {
 
   const ejecutarBorrado = async () => {
     try {
-      // 🔥 CORREGIDO: Ahora usa sessionStorage en vez de localStorage
-      const token = sessionStorage.getItem('token');
+      const token = localStorage.getItem('token');
       const response = await fetch(`${API_URL}/api/tareas/${tareaABorrar.id}`, {
         method: 'DELETE',
         headers: {
@@ -135,6 +123,7 @@ function TaskList() {
       if (response.ok) {
         setTareaABorrar(null); 
         fetchTareas(); 
+        // 🔥 Lanza la notificación de borrado (en color rojo)
         mostrarNotificacion('Tarea eliminada', 'error');
       } else {
         alert("Hubo un error al intentar borrar la tarea.");
@@ -144,12 +133,13 @@ function TaskList() {
     }
   };
 
-  // 🧮 LÓGICA DE CONTADORES
+  // 🧮 LÓGICA DE CONTADORES: Filtramos el array y sacamos la longitud
   const tareasPendientes = tareas.filter(t => t.estado === 'Pendiente').length;
   const tareasEnProgreso = tareas.filter(t => t.estado === 'EnProgreso').length;
   const tareasCompletadas = tareas.filter(t => t.estado === 'Completada').length;
 
-  // 🎯 LÓGICA DE FILTRADO
+  // 🎯 LA MAGIA DEL FILTRADO (NUEVO)
+  // Si el filtro es 'Todas', mostramos la lista entera. Si no, filtramos por el estado.
   const tareasFiltradas = filtroActual === 'Todas' 
     ? tareas 
     : tareas.filter(tarea => tarea.estado === filtroActual);
@@ -173,7 +163,9 @@ function TaskList() {
       {cargando && <p style={{ textAlign: 'center' }}>Cargando tareas...</p>}
       {error && <div className="alert-message alert-error">{error}</div>}
       
-      {/* 🛑 ELIMINADO EL MENSAJE DUPLICADO DE AQUÍ ARRIBA 🛑 */}
+      {!cargando && !error && tareas.length === 0 && (
+        <p style={{ textAlign: 'center', color: '#888' }}>No hay tareas todavía. ¡Crea la primera!</p>
+      )}
 
       {/* ==============================================
           📊 NUEVO LAYOUT: SIDEBAR IZQUIERDO + TAREAS
@@ -235,12 +227,12 @@ function TaskList() {
           {/* 💡 EL NUEVO MICROTEXTO FLOTANTE DE AYUDA */}
           <p style={{
             position: 'absolute',
-            bottom: '-35px', 
+            bottom: '-35px', /* Lo empuja fuera de la caja blanca hacia abajo */
             left: 0,
             width: '100%',
             textAlign: 'center',
             fontSize: '0.8rem',
-            color: '#94a3b8',
+            color: '#94a3b8', /* Un gris azulado muy suave y elegante */
             margin: 0
           }}>
              Haz clic en una sección para filtrar
@@ -252,48 +244,14 @@ function TaskList() {
         <div className="main-content">
           <div className="task-list">
             
-            {/* CASO 1: Cero tareas en TODA la cuenta */}
-            {tareas.length === 0 && !cargando && !error && (
-              <div style={{ 
-                gridColumn: '1 / -1', 
-                display: 'flex', 
-                flexDirection: 'column', 
-                alignItems: 'center', 
-                padding: '60px 20px', 
-                backgroundColor: '#f8fafc', /* Gris súper clarito */
-                borderRadius: '12px', 
-                border: '2px dashed #cbd5e1', /* Borde punteado */
-                margin: '20px 0'
-              }}>
-                <p style={{ color: '#64748b', fontSize: '1.2rem', margin: '0 0 10px 0' }}>
-                  No tienes ninguna tarea creada todavía. 
-                </p>
-                <p style={{ color: 'var(--primary-blue)', fontWeight: 'bold', margin: 0 }}>
-                  Haz clic en "+ Nueva Tarea" para empezar
-                </p>
-              </div>
+            {/* Si no hay tareas en ese filtro, mostramos un mensaje amigable */}
+            {tareasFiltradas.length === 0 && (
+              <p style={{ gridColumn: '1 / -1', textAlign: 'center', color: '#888', padding: '40px 0' }}>
+                No tienes ninguna tarea en este estado. ¡Buen trabajo! 🎉
+              </p>
             )}
 
-            {/* CASO 2: Sí hay tareas, pero 0 en el FILTRO actual */}
-            {tareas.length > 0 && tareasFiltradas.length === 0 && (
-              <div style={{ 
-                gridColumn: '1 / -1', 
-                display: 'flex', 
-                flexDirection: 'column', 
-                alignItems: 'center', 
-                padding: '60px 20px', 
-                backgroundColor: '#f8fafc', 
-                borderRadius: '12px', 
-                border: '2px dashed #cbd5e1', 
-                margin: '20px 0'
-              }}>
-                <p style={{ color: '#64748b', fontSize: '1.1rem', margin: 0 }}>
-                  No tienes ninguna tarea en este estado.
-                </p>
-              </div>
-            )}
-
-            {/* LAS TARJETAS */}
+            {/* 👇 USAMOS tareasFiltradas EN LUGAR DE tareas 👇 */}
             {tareasFiltradas.map((tarea) => (
               <div key={tarea.id} onClick={() => abrirModal(tarea)} style={{ cursor: 'pointer' }}>
                 <TaskCard tarea={tarea} onBorrar={(t) => setTareaABorrar(t)} />

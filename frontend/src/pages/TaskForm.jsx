@@ -27,7 +27,7 @@ function TaskForm() {
     };
 
     try {
-      const token = sessionStorage.getItem('token');
+      const token = localStorage.getItem('token');
 
       const response = await fetch(`${API_URL}/api/tareas`, {
         method: 'POST',
