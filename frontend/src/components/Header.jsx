@@ -34,21 +34,20 @@ function Header() {
  
        {/* GRUPO DERECHO: Nombre de usuario + Botón Cerrar Sesión */}
         <div className="header-right-group">
-          {!isLoginPage && (
+          
+          {/* 👇 LA MAGIA: Solo renderizamos esto si 'usuario' tiene algún valor 👇 */}
+          {usuario && (
             <>
-              {/* Mostramos el texto "Usuario: " y el email */}
-              {usuario && (
-                <span className="header-username">
-                  Usuario: {usuario}
-                </span>
-              )}
+              <span className="header-username">
+                Usuario: {usuario}
+              </span>
 
-              {/* Botón de salida */}
               <button onClick={handleLogout} className="logout-btn-styled">
                 Cerrar Sesión
               </button>
             </>
           )}
+          
         </div>
 
       </div>
