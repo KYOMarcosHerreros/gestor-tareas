@@ -60,7 +60,7 @@ function Login() {
  
         // Guardamos el token en el almacenamiento local del navegador
 
-        localStorage.setItem('token', token);
+        sessionStorage.setItem('token', token);
  
         // Si el login es correcto, navegamos a la raíz (donde están las tareas)
 
