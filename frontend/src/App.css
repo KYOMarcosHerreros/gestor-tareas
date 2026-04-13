@@ -1,15 +1,19 @@
 :root {
-  --primary-blue: #1E6BA2;
-  --dark-grey: #68757B;
-  --gold: #BE8B09;
+  --primary-blue: #1e6ba2;
+  --dark-grey: #68757b;
+  --gold: #be8b09;
   --bg-light: #f0f4f7;
 }
 
-/* 1. EL TRUCO PARA EL FOOTER */
-html, body, #root {
+/* =========================================
+   1. GLOBAL Y ESTRUCTURA (LAYOUT)
+   ========================================= */
+html,
+body,
+#root {
   min-height: 100vh;
   margin: 0;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   background-color: var(--bg-light);
 }
 
@@ -19,15 +23,30 @@ html, body, #root {
   min-height: 100vh;
 }
 
-/* 2. HEADER PEGADO ARRIBA (¡Header compacto!) */
+.container {
+  flex: 1;
+  max-width: 1600px;
+  margin: 25px auto 40px auto;
+  padding: 0 20px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+h2 {
+  margin-top: 0;
+}
+
+/* =========================================
+   2. HEADER Y FOOTER
+   ========================================= */
 .main-header {
   background-color: var(--primary-blue);
   color: white;
-  padding: 10px 0; /* ⬅️ Reducido para afinar la barra */
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-  position: sticky; 
-  top: 0; 
-  z-index: 1000; 
+  padding: 10px 0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
 }
 
 .header-content {
@@ -35,11 +54,10 @@ html, body, #root {
   margin: 0 auto;
   display: flex;
   justify-content: space-between;
-  align-items: center; /* ⬅️ Esto centra mágicamente todo en vertical */
+  align-items: center;
   padding: 0 20px;
 }
 
-/* GRUPO IZQUIERDO (Logo + Título) */
 .header-left-group {
   display: flex;
   align-items: center;
@@ -47,144 +65,72 @@ html, body, #root {
 
 .header-kyocera-logo {
   margin-top: 10px;
-  height: 55px;  
+  height: 55px;
   cursor: pointer;
   transition: opacity 0.2s;
 }
-
 .header-kyocera-logo:hover {
-  opacity: 0.8; 
+  opacity: 0.8;
 }
 
 .header-title-link {
   color: white;
   text-decoration: none;
-  border-left: 2px solid rgba(255, 255, 255, 0.3); 
+  border-left: 2px solid rgba(255, 255, 255, 0.3);
   margin-left: 20px;
   padding-left: 20px;
 }
-
-.header-title-link h1 { 
-  margin: 0; 
-  font-size: 1.4rem; 
+.header-title-link h1 {
+  margin: 0;
+  font-size: 1.4rem;
   font-weight: 600;
 }
 
-/* GRUPO DERECHO (Usuario + Botón) */
 .header-right-group {
   display: flex;
   align-items: center;
-  gap: 20px; 
+  gap: 20px;
 }
-
 .header-username {
-  color: white; 
-  font-size: 0.95rem; 
-  font-weight: 500; 
-  opacity: 0.9; 
-}
-
-/* BOTÓN CERRAR SESIÓN */
-.logout-btn-styled {
-  color: #fff;
-  text-decoration: none;
+  color: white;
   font-size: 0.95rem;
-  font-weight: bold;
-  background-color: rgb(253, 174, 83); 
-  padding: 8px 20px;
-  border-radius: 20px; 
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1); 
-  transition: all 0.3s ease; 
+  font-weight: 500;
+  opacity: 0.9;
 }
 
-.logout-btn-styled:hover {
-  background-color: rgba(255, 255, 255, 0.3); 
-  box-shadow: 0 4px 12px rgba(0,0,0,0.2); 
-  transform: translateY(-1px); 
-}
-
-/* 3. EL CONTENEDOR PRINCIPAL */
-.container {
-  flex: 1; 
-  max-width: 1600px;
-  margin: 25px auto 40px auto; /* ⬅️ Reducimos el margen superior para acercarlo a la barra */
-  padding: 0 20px;
-  width: 100%;
-  box-sizing: border-box;
-}
-
-/* 🛑 ¡EL FRANCOTIRADOR DE SCROLL INVISIBLE! 🛑 */
-h2 {
-  margin-top: 0;
-}
-
-/* 4. FOOTER */
 .main-footer {
   background-color: var(--primary-blue);
   color: white;
   text-align: center;
   padding: 20px 0;
-  margin-top: auto; 
-}
-
-/* 5. TARJETAS Y GRID */
-.task-list {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
-  gap: 25px;
-}
-
-.task-card {
-  background: white;
-  padding: 25px;
-  border-radius: 12px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-  border-left: 6px solid var(--primary-blue);
-  display: flex;
-  flex-direction: column; 
-}
-
-.task-title {
-  margin: 0 0 15px 0;
-  color: var(--primary-blue);
-  font-size: 1.3rem;
-  border-bottom: 1px solid #eee; 
-  padding-bottom: 10px;
-}
-
-.task-details {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  margin-bottom: 20px;
-  color: var(--dark-grey);
-}
-
-.task-info-row {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.badge {
-  padding: 4px 12px;
-  border-radius: 20px;
-  font-size: 0.85rem;
-  font-weight: bold;
-}
-.badge.Pendiente { background-color: #fff3cd; color: #856404; }
-.badge.EnProgreso { background-color: #cce5ff; color: #004085; }
-.badge.Completada { background-color: #d4edda; color: #155724; }
-.badge.Alta { background-color: #f8d7da; color: #721c24; }
-.badge.Media { background-color: #ffeeba; color: #856404; }
-.badge.Baja { background-color: #e2e3e5; color: #383d41; }
-
-.task-actions {
   margin-top: auto;
-  display: flex;
-  justify-content: flex-end;
-  gap: 15px;
+}
+
+/* =========================================
+   3. BOTONES GENERALES
+   ========================================= */
+.btn-primary {
+  background-color: var(--primary-blue);
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+  transition: 0.3s;
+}
+.btn-primary:hover {
+  background-color: var(--gold);
+}
+
+/* Modificador para botones que ocupan todo el ancho (ej. Login) */
+.btn-full {
+  width: 100%;
+  padding: 12px;
+  margin-top: 10px;
+  border-radius: 4px;
 }
 
 .btn-icon {
@@ -195,20 +141,25 @@ h2 {
   cursor: pointer;
   color: var(--dark-grey);
   transition: all 0.2s;
+  display: inline-flex; /* Centra icono y texto */
+  align-items: center;
+  gap: 5px;
 }
-.btn-icon:hover { background: #f0f0f0; }
+.btn-icon:hover {
+  background: #f0f0f0;
+}
 
 .btn-edit {
-  background-color: #e8f4fc; 
+  background-color: #e8f4fc;
   color: var(--primary-blue);
   border: 1px solid #bce0fd;
 }
 .btn-edit:hover {
-  background-color: #d1ebfe; 
+  background-color: #d1ebfe;
 }
 
 .btn-delete {
-  background-color: #fbebed; 
+  background-color: #fbebed;
   color: #c92a2a;
   border: 1px solid #f5c2c7;
 }
@@ -216,21 +167,158 @@ h2 {
   background-color: #f8d7da;
 }
 
-.btn-primary {
-  background-color: var(--primary-blue);
-  color: white;
-  padding: 10px 20px;
-  border: none;
+.logout-btn-styled {
+  color: #fff;
+  text-decoration: none;
+  font-size: 0.95rem;
+  font-weight: bold;
+  background-color: rgb(253, 174, 83);
+  padding: 8px 20px;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+.logout-btn-styled:hover {
+  background-color: rgba(255, 255, 255, 0.3);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  transform: translateY(-1px);
+}
+
+/* =========================================
+   4. DASHBOARD (PANEL IZQUIERDO Y MAIN)
+   ========================================= */
+.dashboard-layout {
+  display: flex;
+  gap: 90px;
+  align-items: flex-start;
+}
+
+.dashboard-sidebar {
+  flex: 0 0 250px;
+  background-color: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  border-top: 4px solid var(--primary-blue);
+  position: sticky;
+  top: 120px;
+}
+
+.main-content {
+  flex: 1;
+}
+
+.counter-box {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px dashed #eee;
+}
+.counter-box:last-child {
+  border-bottom: none;
+}
+.counter-label {
+  font-weight: 500;
+  color: var(--dark-grey);
+}
+.counter-number {
+  font-size: 1.1rem;
+}
+
+/* =========================================
+   5. TARJETAS DE TAREAS Y GRID
+   ========================================= */
+.task-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+  gap: 25px;
+}
+
+.task-card {
+  background: white;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  border-left: 6px solid var(--primary-blue);
+  display: flex;
+  flex-direction: column;
+}
+
+.task-title {
+  margin: 0 0 15px 0;
+  color: var(--primary-blue);
+  font-size: 1.3rem;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 10px;
+}
+
+.task-details {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 20px;
+  color: var(--dark-grey);
+}
+.task-info-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.task-actions {
+  margin-top: auto;
+  display: flex;
+  justify-content: flex-end;
+  gap: 15px;
+}
+
+/* Badges de estado/prioridad */
+.badge {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: bold;
+}
+.badge.Pendiente {
+  background-color: #fff3cd;
+  color: #856404;
+}
+.badge.EnProgreso {
+  background-color: #cce5ff;
+  color: #004085;
+}
+.badge.Completada {
+  background-color: #d4edda;
+  color: #155724;
+}
+.badge.Alta {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+.badge.Media {
+  background-color: #ffeeba;
+  color: #856404;
+}
+.badge.Baja {
+  background-color: #e2e3e5;
+  color: #383d41;
+}
+
+.badge-modified {
+  font-size: 0.7rem;
+  color: #d97706;
+  background-color: #fef3c7;
+  padding: 2px 6px;
   border-radius: 8px;
   font-weight: bold;
-  cursor: pointer;
-  text-decoration: none; 
-  display: inline-block;
-  transition: 0.3s;
+  margin-left: 8px;
 }
-.btn-primary:hover { background-color: var(--gold); }
 
-/* --- ESTILOS PARA FORMULARIOS Y LOGIN --- */
+/* =========================================
+   6. AUTENTICACIÓN (LOGIN/REGISTER)
+   ========================================= */
 .auth-container {
   display: flex;
   justify-content: center;
@@ -242,7 +330,7 @@ h2 {
   background: white;
   padding: 40px;
   border-radius: 12px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
   width: 100%;
   max-width: 500px;
   border-top: 5px solid var(--primary-blue);
@@ -251,23 +339,20 @@ h2 {
 
 .form-title {
   margin-top: 0;
-  margin-bottom: 20px; 
+  margin-bottom: 20px;
   text-align: center;
   color: var(--primary-blue);
 }
-
 .main-form {
   display: flex;
   flex-direction: column;
   gap: 20px;
 }
-
 .form-group {
   display: flex;
   flex-direction: column;
   gap: 8px;
 }
-
 .form-label {
   font-weight: bold;
   color: var(--dark-grey);
@@ -281,69 +366,38 @@ h2 {
   font-family: inherit;
   transition: border-color 0.3s;
 }
-
 .form-input:focus {
   outline: none;
   border-color: var(--primary-blue);
 }
 
-.form-actions {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 20px;
-  align-items: center;
-}
-
-/* --- MENSAJES DE ALERTA (ERRORES Y ÉXITO) --- */
-.alert-message {
-  text-align: center;
-  font-size: 0.9rem;
-  font-weight: bold;
-  padding: 10px 15px;
-  border-radius: 6px;
-  margin-bottom: 20px;
-  animation: fadeIn 0.3s ease-in-out;
-}
-
-.alert-error {
-  background-color: #fee2e2; 
-  color: #dc2626; 
-  border: 1px solid #f87171;
-}
-
-.alert-success {
-  background-color: #dcfce7; 
-  color: #16a34a; 
-  border: 1px solid #86efac;
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(-10px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-/* --- ENLACES PIE DE FORMULARIO DE AUTENTICACIÓN --- */
 .auth-footer-text {
   text-align: center;
   margin-top: 15px;
   font-size: 0.9rem;
   color: var(--dark-grey);
 }
-
 .auth-footer-link {
   color: var(--primary-blue);
   font-weight: bold;
   text-decoration: none;
-  transition: color 0.2s ease; 
+  transition: color 0.2s ease;
 }
-
 .auth-footer-link:hover {
-  color: #154c79; 
+  color: #154c79;
   text-decoration: underline;
 }
 
+.form-actions {
+  display: flex;
+  justify-content: flex-end; /* Empuja los botones a la derecha */
+  gap: 15px; /* Les da un poco de aire entre ellos */
+  margin-top: 20px;
+  align-items: center;
+}
+
 /* =========================================
-   🪄 MAGIA DEL POP-UP (MODAL DE DETALLES)
+   7. MODALES Y NOTIFICACIONES (TOAST)
    ========================================= */
 .modal-overlay {
   position: fixed;
@@ -352,11 +406,11 @@ h2 {
   width: 100vw;
   height: 100vh;
   background-color: rgba(0, 0, 0, 0.4);
-  backdrop-filter: blur(4px); 
+  backdrop-filter: blur(4px);
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1000; 
+  z-index: 1000;
   animation: fadeIn 0.2s ease-in-out;
 }
 
@@ -367,7 +421,7 @@ h2 {
   width: 90%;
   max-width: 550px;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-  animation: slideUp 0.3s ease-out; 
+  animation: slideUp 0.3s ease-out;
 }
 
 .modal-header {
@@ -386,10 +440,9 @@ h2 {
   border-radius: 0 8px 8px 0;
   margin-bottom: 25px;
   color: #334155;
-  white-space: pre-wrap; 
+  white-space: pre-wrap;
   line-height: 1.6;
-  word-break: break-word; 
-  overflow-wrap: break-word;
+  word-break: break-word;
 }
 
 .modal-grid {
@@ -401,13 +454,11 @@ h2 {
   border-radius: 8px;
   margin-bottom: 25px;
 }
-
 .modal-grid p {
   margin: 0;
   font-size: 0.95rem;
   color: var(--dark-grey);
 }
-
 .modal-grid strong {
   display: block;
   font-size: 0.8rem;
@@ -416,87 +467,134 @@ h2 {
   margin-bottom: 5px;
 }
 
-@keyframes slideUp {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-/* =========================================
-   🔔 NOTIFICACIONES FLOTANTES (TOAST)
-   ========================================= */
 .toast-notification {
   position: fixed;
-  top: 20px; 
+  top: 20px;
   left: 50%;
-  transform: translateX(-50%); 
-  background-color: #10b981; 
+  transform: translateX(-50%);
+  background-color: #10b981;
   color: white;
   padding: 12px 24px;
   border-radius: 8px;
   box-shadow: 0 10px 25px rgba(16, 185, 129, 0.4);
   font-weight: bold;
-  z-index: 9999; 
-  animation: slideDownFade 0.4s ease-out, fadeOut 0.4s ease-in 2.6s forwards;
+  z-index: 9999;
+  animation:
+    slideDownFade 0.4s ease-out,
+    fadeOut 0.4s ease-in 2.6s forwards;
 }
-
 .toast-error {
   background-color: #e11d48;
   box-shadow: 0 10px 25px rgba(225, 29, 72, 0.4);
 }
 
-@keyframes slideDownFade {
-  from { top: -50px; opacity: 0; }
-  to { top: 20px; opacity: 1; }
+.alert-message {
+  text-align: center;
+  font-size: 0.9rem;
+  font-weight: bold;
+  padding: 10px 15px;
+  border-radius: 6px;
+  margin-bottom: 20px;
+  animation: fadeIn 0.3s ease-in-out;
 }
-
-@keyframes fadeOut {
-  from { opacity: 1; }
-  to { opacity: 0; visibility: hidden; }
+.alert-error {
+  background-color: #fee2e2;
+  color: #dc2626;
+  border: 1px solid #f87171;
+}
+.alert-success {
+  background-color: #dcfce7;
+  color: #16a34a;
+  border: 1px solid #86efac;
 }
 
 /* =========================================
-   📊 DASHBOARD LAYOUT (SIDEBAR + GRID)
+   8. UTILIDADES EXTRA (Limpieza de HTML)
    ========================================= */
-.dashboard-layout {
-  display: flex;
-  gap: 90px;
-  align-items: flex-start;
+.text-center { text-align: center; }
+.page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
+.page-title { color: var(--primary-blue); margin: 0; }
+.sidebar-title { margin-top: 0; color: #334155; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+
+/* Estados vacíos (Cuando no hay tareas) */
+.empty-state { 
+  grid-column: 1 / -1; display: flex; flex-direction: column; align-items: center; 
+  padding: 60px 20px; background-color: #f8fafc; border-radius: 12px; 
+  border: 2px dashed #cbd5e1; margin: 20px 0; text-align: center; 
+}
+.empty-state p:first-child { color: #64748b; font-size: 1.2rem; margin: 0 0 10px 0; }
+.empty-state p:last-child { color: var(--primary-blue); font-weight: bold; margin: 0; }
+
+/* Formularios y Modales */
+.char-counter { text-align: right; font-size: 0.8rem; color: var(--dark-grey); margin-top: 4px; }
+.modal-sm { max-width: 400px; text-align: center; }
+.modal-actions { display: flex; justify-content: center; gap: 15px; margin-top: 20px; }
+.btn-danger { background-color: #e11d48; border: none; }
+.btn-danger:hover { background-color: #be123c; }
+
+/* =========================================
+   9. FILTROS Y ESTADOS DE INTERACCIÓN
+   ========================================= */
+/* Filtros del Sidebar */
+.filter-box {
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+  opacity: 0.6;
+}
+.filter-box:hover {
+  opacity: 0.8;
+}
+.filter-box.active {
+  opacity: 1;
 }
 
-/* La columna de la izquierda */
-.dashboard-sidebar {
-  flex: 0 0 250px;
-  background-color: white;
-  padding: 20px;
-  border-radius: 12px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-  border-top: 4px solid var(--primary-blue);
-  position: sticky;
-  top: 120px; 
+/* Modal extra-limpio */
+.modal-grid-transparent {
+  margin-bottom: 0;
+  padding: 0;
+  background-color: transparent;
+}
+.danger-text {
+  color: #e11d48;
+  margin-top: 0;
 }
 
-/* La columna derecha donde van las tareas */
-.main-content {
-  flex: 1; /* Ocupa todo el espacio sobrante */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
-
-/* Las cajitas de los contadores */
-.counter-box {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 12px 0;
-  border-bottom: 1px dashed #eee;
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
-.counter-box:last-child {
-  border-bottom: none;
+@keyframes slideDownFade {
+  from {
+    top: -50px;
+    opacity: 0;
+  }
+  to {
+    top: 20px;
+    opacity: 1;
+  }
 }
-
-.counter-label {
-  font-weight: 500;
-  color: var(--dark-grey);
-}
-
-.counter-number {
-  font-size: 1.1rem;
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+    visibility: hidden;
+  }
 }

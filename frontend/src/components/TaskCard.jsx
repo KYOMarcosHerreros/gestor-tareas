@@ -12,15 +12,9 @@ function TaskCard({ tarea, onBorrar }) {
         <div className="task-info-row">
           <span>
             ⏰ <strong>Límite:</strong> {tarea.fechaLimite ? new Date(tarea.fechaLimite).toLocaleDateString('es-ES') : 'Sin límite'}
-            
-            {/* --- EL CARTEL DE MODIFICADA --- */}
+
             {tarea.fechaModificada && (
-              <span style={{ 
-                fontSize: '0.7rem', color: '#d97706', backgroundColor: '#fef3c7', 
-                padding: '2px 6px', borderRadius: '8px', fontWeight: 'bold', marginLeft: '8px' 
-              }}>
-                (Modificada)
-              </span>
+              <span className="badge-modified">(Modificada)</span>
             )}
           </span>
         </div>
@@ -35,18 +29,17 @@ function TaskCard({ tarea, onBorrar }) {
         </div>
       </div>
 
-      <div className="task-actions" style={{ display: 'flex', gap: '10px', marginTop: '15px' }}>
-        {/* El botón de ver detalles es decorativo, porque la tarjeta entera ya es clickable */}
-        <button className="btn-icon btn-edit" style={{ display: 'flex', gap: '5px', alignItems: 'center' }}>
+      {/* Los estilos de actions ya están en el CSS */}
+      <div className="task-actions">
+        <button className="btn-icon btn-edit">
           👁️ Ver Detalles
         </button>
         
-        {/* 🔥 AQUÍ ESTÁ LA MAGIA PARA QUE NO SE ABRA EL POP-UP DE EDICIÓN */}
         <button 
           className="btn-icon btn-delete" 
           onClick={(e) => {
-            e.stopPropagation(); // Pincha la burbuja del clic
-            onBorrar(tarea); // Llama a la función de borrar
+            e.stopPropagation(); 
+            onBorrar(tarea); 
           }}
         >
           Borrar

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { loginUser } from '../services/api'; // 👈 Importamos nuestro servicio
+import { loginUser } from '../services/api';
 
 function Login() {
   const [email, setEmail] = useState(''); 
@@ -13,14 +13,11 @@ function Login() {
     setError('');
 
     try {
-      // 🚀 Usamos la API centralizada
       const token = await loginUser(email, password);
-      
       sessionStorage.setItem('token', token);
       navigate('/');
     } catch (err) {
       console.error(err);
-      // Atrapamos el error que lanza api.js o errores de red
       setError(err.message || 'No se pudo conectar con el servidor. ¿Está encendido el Backend?');
     }
   };
@@ -55,18 +52,14 @@ function Login() {
               required
             />
           </div>
-          <button
-            type="submit"
-            className="btn-primary"
-            style={{ 
-              marginTop: '10px', width: '100%', border: 'none', cursor: 'pointer',
-              padding: '12px', borderRadius: '4px', backgroundColor: '#0056b3',
-              color: 'white', fontWeight: 'bold'
-            }}
-          >
+          
+          {/* Botón limpio usando clases */}
+          <button type="submit" className="btn-primary btn-full">
             Entrar al Gestor
           </button>
-          <div className="auth-footer-text" style={{ marginTop: '15px', textAlign: 'center' }}>
+          
+          {/* Footer limpio */}
+          <div className="auth-footer-text">
             ¿No eres usuario? <Link to="/registro" className="auth-footer-link">Regístrate aquí</Link>
           </div>
         </form>

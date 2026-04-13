@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { registerUser } from '../services/api'; // 👈 Importamos nuestro servicio
+import { registerUser } from '../services/api'; 
 
 function Register() {
   const navigate = useNavigate();
@@ -23,9 +23,7 @@ function Register() {
     }
 
     try {
-      // 🚀 Usamos la API centralizada
       await registerUser(nombre, email, password);
-      
       setMensajeExito('¡Cuenta creada con éxito! Redirigiendo al login...');
       setTimeout(() => navigate('/login'), 2000);
     } catch (err) {
@@ -44,57 +42,23 @@ function Register() {
         <form className="main-form" onSubmit={handleSubmit}>
           <div className="form-group">
             <label className="form-label">Nombre Completo</label>
-            <input 
-              type="text" 
-              className="form-input" 
-              placeholder="Ej: Andrei Popa" 
-              value={nombre}
-              onChange={(e) => setNombre(e.target.value)}
-              required 
-            />
+            <input type="text" className="form-input" placeholder="Ej: Andrei Popa" value={nombre} onChange={(e) => setNombre(e.target.value)} required />
           </div>
           <div className="form-group">
             <label className="form-label">Correo Corporativo</label>
-            <input 
-              type="email" 
-              className="form-input" 
-              placeholder="usuario@kyocera.es" 
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required 
-            />
+            <input type="email" className="form-input" placeholder="usuario@kyocera.es" value={email} onChange={(e) => setEmail(e.target.value)} required />
           </div>
           <div className="form-group">
             <label className="form-label">Contraseña</label>
-            <input 
-              type="password" 
-              className="form-input" 
-              placeholder="••••••••" 
-              minLength="6" 
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required 
-            />
+            <input type="password" className="form-input" placeholder="••••••••" minLength="6" value={password} onChange={(e) => setPassword(e.target.value)} required />
           </div>
           <div className="form-group">
             <label className="form-label">Confirmar Contraseña</label>
-            <input 
-              type="password" 
-              className="form-input" 
-              placeholder="Repite la contraseña" 
-              minLength="6" 
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              required 
-            />
+            <input type="password" className="form-input" placeholder="Repite la contraseña" minLength="6" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} required />
           </div>
-          <button 
-            type="submit" 
-            className="btn-primary" 
-            style={{ marginTop: '10px', width: '100%', border: 'none', cursor: 'pointer' }}
-          >
-            Registrarse
-          </button>
+
+          <button type="submit" className="btn-primary btn-full">Registrarse</button>
+          
           <div className="auth-footer-text">
             ¿Ya tienes cuenta? <Link to="/login" className="auth-footer-link">Inicia sesión</Link>
           </div>

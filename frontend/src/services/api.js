@@ -2,7 +2,6 @@
 
 const API_URL = 'https://unsocialized-unstalemated-corie.ngrok-free.dev';
 
-// Auxiliar para los headers (maneja el token automáticamente si existe)
 const getHeaders = () => {
   const token = sessionStorage.getItem('token');
   const headers = {
@@ -15,10 +14,6 @@ const getHeaders = () => {
   return headers;
 };
 
-// ==========================================
-// 🔐 SERVICIOS DE AUTENTICACIÓN
-// ==========================================
-
 export const loginUser = async (email, password) => {
   const response = await fetch(`${API_URL}/api/auth/login`, {
     method: 'POST',
@@ -27,8 +22,20 @@ export const loginUser = async (email, password) => {
   });
 
   if (!response.ok) {
-    const msg = await response.text();
-    throw new Error(msg || 'Usuario o contraseña incorrectos');
+    const textMsg = await response.text();
+    try {
+      const errorObj = JSON.parse(textMsg);
+      // 🔥 Magia: Si el backend manda errores de validación de .NET, sacamos el primero
+      if (errorObj.errors) {
+        const primerError = Object.keys(errorObj.errors)[0];
+        throw new Error(errorObj.errors[primerError][0]); 
+      }
+      throw new Error(errorObj.message || 'Usuario o contraseña incorrectos');
+    } catch (e) {
+      // Si el parseo falla, es que no era JSON, lanzamos el error normal
+      if (e.name === 'SyntaxError') throw new Error(textMsg || 'Error de conexión');
+      throw e; 
+    }
   }
   return await response.text();
 };
@@ -46,10 +53,6 @@ export const registerUser = async (nombre, email, password) => {
   }
   return true;
 };
-
-// ==========================================
-// 📝 SERVICIOS DE TAREAS
-// ==========================================
 
 export const getTareas = async () => {
   const response = await fetch(`${API_URL}/api/tareas`, {
@@ -76,5 +79,19 @@ export const deleteTarea = async (id) => {
     headers: getHeaders(),
   });
   if (!response.ok) throw new Error('Error al borrar la tarea');
+  return true;
+};
+
+export const createTarea = async (tareaData) => {
+  const response = await fetch(`${API_URL}/api/tareas`, {
+    method: 'POST',
+    headers: getHeaders(), // 👈 Usa nuestra función centralizada
+    body: JSON.stringify(tareaData),
+  });
+
+  if (!response.ok) {
+    const data = await response.json();
+    throw new Error(data.message || 'Error al guardar la tarea');
+  }
   return true;
 };
