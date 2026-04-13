@@ -1,0 +1,502 @@
+:root {
+  --primary-blue: #1E6BA2;
+  --dark-grey: #68757B;
+  --gold: #BE8B09;
+  --bg-light: #f0f4f7;
+}
+
+/* 1. EL TRUCO PARA EL FOOTER */
+html, body, #root {
+  min-height: 100vh;
+  margin: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: var(--bg-light);
+}
+
+.app-wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* 2. HEADER PEGADO ARRIBA (¡Header compacto!) */
+.main-header {
+  background-color: var(--primary-blue);
+  color: white;
+  padding: 10px 0; /* ⬅️ Reducido para afinar la barra */
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  position: sticky; 
+  top: 0; 
+  z-index: 1000; 
+}
+
+.header-content {
+  max-width: 1600px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center; /* ⬅️ Esto centra mágicamente todo en vertical */
+  padding: 0 20px;
+}
+
+/* GRUPO IZQUIERDO (Logo + Título) */
+.header-left-group {
+  display: flex;
+  align-items: center;
+}
+
+.header-kyocera-logo {
+  margin-top: 10px;
+  height: 55px;  
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.header-kyocera-logo:hover {
+  opacity: 0.8; 
+}
+
+.header-title-link {
+  color: white;
+  text-decoration: none;
+  border-left: 2px solid rgba(255, 255, 255, 0.3); 
+  margin-left: 20px;
+  padding-left: 20px;
+}
+
+.header-title-link h1 { 
+  margin: 0; 
+  font-size: 1.4rem; 
+  font-weight: 600;
+}
+
+/* GRUPO DERECHO (Usuario + Botón) */
+.header-right-group {
+  display: flex;
+  align-items: center;
+  gap: 20px; 
+}
+
+.header-username {
+  color: white; 
+  font-size: 0.95rem; 
+  font-weight: 500; 
+  opacity: 0.9; 
+}
+
+/* BOTÓN CERRAR SESIÓN */
+.logout-btn-styled {
+  color: #fff;
+  text-decoration: none;
+  font-size: 0.95rem;
+  font-weight: bold;
+  background-color: rgb(253, 174, 83); 
+  padding: 8px 20px;
+  border-radius: 20px; 
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1); 
+  transition: all 0.3s ease; 
+}
+
+.logout-btn-styled:hover {
+  background-color: rgba(255, 255, 255, 0.3); 
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2); 
+  transform: translateY(-1px); 
+}
+
+/* 3. EL CONTENEDOR PRINCIPAL */
+.container {
+  flex: 1; 
+  max-width: 1600px;
+  margin: 25px auto 40px auto; /* ⬅️ Reducimos el margen superior para acercarlo a la barra */
+  padding: 0 20px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* 🛑 ¡EL FRANCOTIRADOR DE SCROLL INVISIBLE! 🛑 */
+h2 {
+  margin-top: 0;
+}
+
+/* 4. FOOTER */
+.main-footer {
+  background-color: var(--primary-blue);
+  color: white;
+  text-align: center;
+  padding: 20px 0;
+  margin-top: auto; 
+}
+
+/* 5. TARJETAS Y GRID */
+.task-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+  gap: 25px;
+}
+
+.task-card {
+  background: white;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+  border-left: 6px solid var(--primary-blue);
+  display: flex;
+  flex-direction: column; 
+}
+
+.task-title {
+  margin: 0 0 15px 0;
+  color: var(--primary-blue);
+  font-size: 1.3rem;
+  border-bottom: 1px solid #eee; 
+  padding-bottom: 10px;
+}
+
+.task-details {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 20px;
+  color: var(--dark-grey);
+}
+
+.task-info-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.badge {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: bold;
+}
+.badge.Pendiente { background-color: #fff3cd; color: #856404; }
+.badge.EnProgreso { background-color: #cce5ff; color: #004085; }
+.badge.Completada { background-color: #d4edda; color: #155724; }
+.badge.Alta { background-color: #f8d7da; color: #721c24; }
+.badge.Media { background-color: #ffeeba; color: #856404; }
+.badge.Baja { background-color: #e2e3e5; color: #383d41; }
+
+.task-actions {
+  margin-top: auto;
+  display: flex;
+  justify-content: flex-end;
+  gap: 15px;
+}
+
+.btn-icon {
+  background: white;
+  border: 1px solid #ccc;
+  padding: 8px 15px;
+  border-radius: 6px;
+  cursor: pointer;
+  color: var(--dark-grey);
+  transition: all 0.2s;
+}
+.btn-icon:hover { background: #f0f0f0; }
+
+.btn-edit {
+  background-color: #e8f4fc; 
+  color: var(--primary-blue);
+  border: 1px solid #bce0fd;
+}
+.btn-edit:hover {
+  background-color: #d1ebfe; 
+}
+
+.btn-delete {
+  background-color: #fbebed; 
+  color: #c92a2a;
+  border: 1px solid #f5c2c7;
+}
+.btn-delete:hover {
+  background-color: #f8d7da;
+}
+
+.btn-primary {
+  background-color: var(--primary-blue);
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  text-decoration: none; 
+  display: inline-block;
+  transition: 0.3s;
+}
+.btn-primary:hover { background-color: var(--gold); }
+
+/* --- ESTILOS PARA FORMULARIOS Y LOGIN --- */
+.auth-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 60vh;
+}
+
+.form-card {
+  background: white;
+  padding: 40px;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+  width: 100%;
+  max-width: 500px;
+  border-top: 5px solid var(--primary-blue);
+  margin: 0 auto;
+}
+
+.form-title {
+  margin-top: 0;
+  margin-bottom: 20px; 
+  text-align: center;
+  color: var(--primary-blue);
+}
+
+.main-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-label {
+  font-weight: bold;
+  color: var(--dark-grey);
+}
+
+.form-input {
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+  font-family: inherit;
+  transition: border-color 0.3s;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: var(--primary-blue);
+}
+
+.form-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+  align-items: center;
+}
+
+/* --- MENSAJES DE ALERTA (ERRORES Y ÉXITO) --- */
+.alert-message {
+  text-align: center;
+  font-size: 0.9rem;
+  font-weight: bold;
+  padding: 10px 15px;
+  border-radius: 6px;
+  margin-bottom: 20px;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.alert-error {
+  background-color: #fee2e2; 
+  color: #dc2626; 
+  border: 1px solid #f87171;
+}
+
+.alert-success {
+  background-color: #dcfce7; 
+  color: #16a34a; 
+  border: 1px solid #86efac;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* --- ENLACES PIE DE FORMULARIO DE AUTENTICACIÓN --- */
+.auth-footer-text {
+  text-align: center;
+  margin-top: 15px;
+  font-size: 0.9rem;
+  color: var(--dark-grey);
+}
+
+.auth-footer-link {
+  color: var(--primary-blue);
+  font-weight: bold;
+  text-decoration: none;
+  transition: color 0.2s ease; 
+}
+
+.auth-footer-link:hover {
+  color: #154c79; 
+  text-decoration: underline;
+}
+
+/* =========================================
+   🪄 MAGIA DEL POP-UP (MODAL DE DETALLES)
+   ========================================= */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(4px); 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; 
+  animation: fadeIn 0.2s ease-in-out;
+}
+
+.modal-content {
+  background-color: white;
+  padding: 30px;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 550px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  animation: slideUp 0.3s ease-out; 
+}
+
+.modal-header {
+  color: var(--primary-blue);
+  margin-top: 0;
+  border-bottom: 2px solid #f1f5f9;
+  padding-bottom: 15px;
+  margin-bottom: 20px;
+  font-size: 1.5rem;
+}
+
+.modal-description-box {
+  background-color: #f8fafc;
+  border-left: 4px solid var(--primary-blue);
+  padding: 15px;
+  border-radius: 0 8px 8px 0;
+  margin-bottom: 25px;
+  color: #334155;
+  white-space: pre-wrap; 
+  line-height: 1.6;
+  word-break: break-word; 
+  overflow-wrap: break-word;
+}
+
+.modal-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  background-color: #f1f5f9;
+  padding: 20px;
+  border-radius: 8px;
+  margin-bottom: 25px;
+}
+
+.modal-grid p {
+  margin: 0;
+  font-size: 0.95rem;
+  color: var(--dark-grey);
+}
+
+.modal-grid strong {
+  display: block;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  color: #64748b;
+  margin-bottom: 5px;
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* =========================================
+   🔔 NOTIFICACIONES FLOTANTES (TOAST)
+   ========================================= */
+.toast-notification {
+  position: fixed;
+  top: 20px; 
+  left: 50%;
+  transform: translateX(-50%); 
+  background-color: #10b981; 
+  color: white;
+  padding: 12px 24px;
+  border-radius: 8px;
+  box-shadow: 0 10px 25px rgba(16, 185, 129, 0.4);
+  font-weight: bold;
+  z-index: 9999; 
+  animation: slideDownFade 0.4s ease-out, fadeOut 0.4s ease-in 2.6s forwards;
+}
+
+.toast-error {
+  background-color: #e11d48;
+  box-shadow: 0 10px 25px rgba(225, 29, 72, 0.4);
+}
+
+@keyframes slideDownFade {
+  from { top: -50px; opacity: 0; }
+  to { top: 20px; opacity: 1; }
+}
+
+@keyframes fadeOut {
+  from { opacity: 1; }
+  to { opacity: 0; visibility: hidden; }
+}
+
+/* =========================================
+   📊 DASHBOARD LAYOUT (SIDEBAR + GRID)
+   ========================================= */
+.dashboard-layout {
+  display: flex;
+  gap: 90px;
+  align-items: flex-start;
+}
+
+/* La columna de la izquierda */
+.dashboard-sidebar {
+  flex: 0 0 250px;
+  background-color: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+  border-top: 4px solid var(--primary-blue);
+  position: sticky;
+  top: 120px; 
+}
+
+/* La columna derecha donde van las tareas */
+.main-content {
+  flex: 1; /* Ocupa todo el espacio sobrante */
+}
+
+/* Las cajitas de los contadores */
+.counter-box {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px dashed #eee;
+}
+.counter-box:last-child {
+  border-bottom: none;
+}
+
+.counter-label {
+  font-weight: 500;
+  color: var(--dark-grey);
+}
+
+.counter-number {
+  font-size: 1.1rem;
+}
