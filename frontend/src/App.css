@@ -109,20 +109,41 @@ h2 {
 /* =========================================
    3. BOTONES GENERALES
    ========================================= */
+/* --- Botón Azul (Primario) y Blanco (Secundario) BLINDADOS --- */
+.btn-primary, .btn-secondary {
+  height: 42px; /* ⬅️ Altura fija para que sean GEMELOS idénticos */
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: inherit;
+  font-size: 0.95rem;
+  padding: 0 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-decoration: none;
+}
+
 .btn-primary {
   background-color: var(--primary-blue);
   color: white;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 8px;
   font-weight: bold;
-  cursor: pointer;
-  text-decoration: none;
-  display: inline-block;
-  transition: 0.3s;
+  border: 1px solid transparent; 
 }
 .btn-primary:hover {
-  background-color: var(--gold);
+  background-color: #0b457e;
+}
+
+.btn-secondary {
+  background-color: transparent;
+  color: #64748b;
+  font-weight: 500;
+  border: 1px solid #cbd5e1; 
+}
+.btn-secondary:hover {
+  background-color: #f1f5f9;
+  color: #334155;
 }
 
 /* Modificador para botones que ocupan todo el ancho (ej. Login) */
@@ -232,8 +253,8 @@ h2 {
    ========================================= */
 .task-list {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
-  gap: 25px;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 20px;
 }
 
 .task-card {
@@ -535,18 +556,6 @@ h2 {
 /* =========================================
    9. FILTROS Y ESTADOS DE INTERACCIÓN
    ========================================= */
-/* Filtros del Sidebar */
-.filter-box {
-  cursor: pointer;
-  transition: opacity 0.2s ease;
-  opacity: 0.6;
-}
-.filter-box:hover {
-  opacity: 0.8;
-}
-.filter-box.active {
-  opacity: 1;
-}
 
 /* Modal extra-limpio */
 .modal-grid-transparent {
@@ -557,6 +566,116 @@ h2 {
 .danger-text {
   color: #e11d48;
   margin-top: 0;
+}
+
+/* =========================================
+   10. AJUSTES FINALES UI (LUCIDE, FILTROS Y COLORES)
+   ========================================= */
+.task-info-row { 
+  display: flex; 
+  align-items: center; 
+  gap: 12px; 
+}
+
+.icon-lucide {
+  color: var(--primary-blue);
+  flex-shrink: 0;
+}
+
+/* 1. Botones más grandes y proporcionados */
+.btn-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px; 
+  width: 42px; /* ⬅️ Aumentado de 36 a 42 */
+  height: 42px; /* ⬅️ Aumentado de 36 a 42 */
+}
+/* 2. Filtros del Sidebar con más separación y volumen */
+.filter-box {
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border-radius: 8px; 
+  margin-bottom: 8px; 
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* 🔥 Al juntar las dos clases, forzamos un relleno interno amplio */
+.filter-box.counter-box {
+  padding: 12px 16px; 
+  border-bottom: none;
+}
+
+.filter-box:hover {
+  background-color: #f8fafc;
+}
+
+/* 3. Colores Dinámicos para el Menú Lateral */
+.filter-box.active.Todas,
+.filter-box.active.EnProgreso {
+  background-color: #e0f2fe; 
+  border-left: 4px solid var(--primary-blue); 
+}
+.filter-box.active.Pendiente {
+  background-color: #fef3c7; /* Fondo amarillo suave */
+  border-left: 4px solid #d97706; /* Borde amarillo fuerte */
+}
+.filter-box.active.Completada {
+  background-color: #dcfce7; /* Fondo verde suave */
+  border-left: 4px solid #16a34a; /* Borde verde fuerte */
+}
+
+/* 4. Colores Dinámicos para el lateral de las Tarjetas */
+.task-card.Pendiente { border-left-color: #d9aa36; }
+.task-card.EnProgreso { border-left-color: var(--primary-blue); }
+.task-card.Completada { border-left-color: #10b981; }
+
+.counter-box {
+  border-bottom: none;
+  padding: 0;
+}
+.filter-label-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* 5. Textos de ayuda (Hint y Contador) */
+.sidebar-wrapper {
+  flex: 0 0 250px;
+  position: sticky;
+  top: 120px; 
+}
+
+/* La caja blanca ahora solo es la caja, sin el position sticky */
+.dashboard-sidebar {
+  background-color: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+  border-top: 4px solid var(--primary-blue);
+}
+
+/* El texto de pista fuera de la caja */
+.sidebar-hint {
+  text-align: center;
+  font-size: 0.85rem;
+  color: #68757B; 
+  margin-top: 15px; 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px; /* Separación entre el nuevo icono y el texto */
+}
+.filter-info-text {
+  margin-bottom: 20px;
+  color: #64748b;
+  font-size: 1rem;
+}
+.filter-info-text strong {
+  color: var(--primary-blue);
 }
 
 @keyframes fadeIn {

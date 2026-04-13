@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import TaskCard from '../components/TaskCard';
 import { getTareas, updateTarea, deleteTarea } from '../services/api'; 
+import { ListTodo, Clock, CheckCircle, LayoutList, Info } from 'lucide-react';
 
 function TaskList() {
   const [tareas, setTareas] = useState([]);
@@ -83,7 +84,7 @@ function TaskList() {
       fetchTareas(); 
       mostrarNotificacion('Tarea eliminada', 'error');
     } catch (err) {
-      alert("Error al borrar: " + err.message);
+      alert("Error al eliminar: " + err.message);
     }
   };
 
@@ -94,14 +95,12 @@ function TaskList() {
 
   return (
     <div>
-      {/* 🔔 Notificaciones */}
       {notificacion.visible && (
         <div className={`toast-notification ${notificacion.tipo === 'error' ? 'toast-error' : ''}`}>
           {notificacion.mensaje}
         </div>
       )}
 
-      {/* 🛑 Header */}
       <div className="page-header">
         <h2 className="page-title">Listado de Tareas</h2>
         <Link to="/nueva-tarea" className="btn-primary">
@@ -113,43 +112,62 @@ function TaskList() {
       {error && <div className="alert-message alert-error">{error}</div>}
 
       <div className="dashboard-layout">
-        <aside className="dashboard-sidebar">
-          <h3 className="sidebar-title">Resumen</h3>
+        {/* 🔥 NUEVO: El wrapper que contiene la caja y el texto */}
+        <div className="sidebar-wrapper">
           
-          <div 
-            className={`counter-box filter-box ${filtroActual === 'Pendiente' ? 'active' : ''}`} 
-            onClick={() => setFiltroActual('Pendiente')}
-          >
-            <span className="counter-label">{filtroActual === 'Pendiente' ? '▶ ' : ''}Pendientes</span>
-            <span className="counter-number badge Pendiente">{tareasPendientes}</span>
-          </div>
+          <aside className="dashboard-sidebar">
+            <h3 className="sidebar-title">Resumen</h3>
+            
+            <div className={`filter-box counter-box ${filtroActual === 'Pendiente' ? 'active Pendiente' : ''}`} onClick={() => setFiltroActual('Pendiente')}>
+              <div className="filter-label-group">
+                <ListTodo size={18} className="icon-lucide" style={{ color: '#856404' }}/>
+                <span className="counter-label" style={{ fontWeight: filtroActual === 'Pendiente' ? 'bold' : '500' }}>Pendientes</span>
+              </div>
+              <span className="counter-number badge Pendiente">{tareasPendientes}</span>
+            </div>
+            
+            <div className={`filter-box counter-box ${filtroActual === 'EnProgreso' ? 'active EnProgreso' : ''}`} onClick={() => setFiltroActual('EnProgreso')}>
+              <div className="filter-label-group">
+                <Clock size={18} className="icon-lucide" style={{ color: '#004085' }}/>
+                <span className="counter-label" style={{ fontWeight: filtroActual === 'EnProgreso' ? 'bold' : '500' }}>En Progreso</span>
+              </div>
+              <span className="counter-number badge EnProgreso">{tareasEnProgreso}</span>
+            </div>
+            
+            <div className={`filter-box counter-box ${filtroActual === 'Completada' ? 'active Completada' : ''}`} onClick={() => setFiltroActual('Completada')}>
+              <div className="filter-label-group">
+                <CheckCircle size={18} className="icon-lucide" style={{ color: '#155724' }}/>
+                <span className="counter-label" style={{ fontWeight: filtroActual === 'Completada' ? 'bold' : '500' }}>Completadas</span>
+              </div>
+              <span className="counter-number badge Completada">{tareasCompletadas}</span>
+            </div>
+            
+            <div style={{ margin: '15px 0', borderTop: '2px solid #eee' }}></div>
+
+            <div className={`filter-box counter-box ${filtroActual === 'Todas' ? 'active Todas' : ''}`} onClick={() => setFiltroActual('Todas')}>
+              <div className="filter-label-group">
+                <LayoutList size={18} className="icon-lucide" />
+                <span className="counter-label" style={{ fontWeight: 'bold', color: 'var(--primary-blue)' }}>Total Tareas</span>
+              </div>
+              <span className="counter-number" style={{ fontWeight: 'bold', color: 'var(--primary-blue)' }}>{tareas.length}</span>
+            </div>
+          </aside>
+
+          {/* 🔥 EL TEXTO ESTÁ AHORA FUERA DE LA CAJA BLANCA */}
+          <p className="sidebar-hint">
+            <Info size={16} /> Haz clic en las categorías para filtrar
+          </p>
           
-          <div 
-            className={`counter-box filter-box ${filtroActual === 'EnProgreso' ? 'active' : ''}`} 
-            onClick={() => setFiltroActual('EnProgreso')}
-          >
-            <span className="counter-label">{filtroActual === 'EnProgreso' ? '▶ ' : ''}En Progreso</span>
-            <span className="counter-number badge EnProgreso">{tareasEnProgreso}</span>
-          </div>
-          
-          <div 
-            className={`counter-box filter-box ${filtroActual === 'Completada' ? 'active' : ''}`} 
-            onClick={() => setFiltroActual('Completada')}
-          >
-            <span className="counter-label">{filtroActual === 'Completada' ? '▶ ' : ''}Completadas</span>
-            <span className="counter-number badge Completada">{tareasCompletadas}</span>
-          </div>
-          
-          <div 
-            className={`counter-box filter-box ${filtroActual === 'Todas' ? 'active' : ''}`} 
-            onClick={() => setFiltroActual('Todas')}
-          >
-            <span className="counter-label page-title">{filtroActual === 'Todas' ? '▶ ' : ''}Total Tareas</span>
-            <span className="counter-number page-title">{tareas.length}</span>
-          </div>
-        </aside>
+        </div>
 
         <div className="main-content">
+          {/* El nuevo texto que indica cuántas tareas estamos viendo */}
+          {filtroActual !== 'Todas' && (
+            <p className="filter-info-text">
+              Mostrando <strong>{tareasFiltradas.length}</strong> tareas {filtroActual === 'EnProgreso' ? 'En Progreso' : filtroActual} (de un total de {tareas.length})
+            </p>
+          )}
+
           <div className="task-list">
             {tareas.length === 0 && !cargando && !error && (
               <div className="empty-state">
@@ -167,7 +185,7 @@ function TaskList() {
         </div>
       </div>
 
-      {/* 🔍 Modal de Detalle/Edición */}
+      {/* MODAL DETALLES */}
       {tareaSeleccionada && (
         <div className="modal-overlay" onClick={() => setTareaSeleccionada(null)}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
@@ -210,7 +228,7 @@ function TaskList() {
               <>
                 <div className="modal-description-box">{tareaSeleccionada.descripcion || 'Sin descripción.'}</div>
                 <div className="modal-grid">
-                  <div><strong>Estado</strong><span className={`badge ${tareaSeleccionada.estado}`}>{tareaSeleccionada.estado}</span></div>
+                  <div><strong>Estado</strong><span className={`badge ${tareaSeleccionada.estado}`}>{tareaSeleccionada.estado.replace('EnProgreso', 'En Progreso')}</span></div>
                   <div><strong>Prioridad</strong><span className={`badge ${tareaSeleccionada.prioridad}`}>{tareaSeleccionada.prioridad}</span></div>
                   <div><strong>Límite</strong> {tareaSeleccionada.fechaLimite ? new Date(tareaSeleccionada.fechaLimite).toLocaleDateString() : 'Sin fecha'}</div>
                 </div>
@@ -218,23 +236,24 @@ function TaskList() {
             )}
             <div className="modal-actions">
               {modoEdicion ? (
-                <><button className="btn-icon" onClick={() => setModoEdicion(false)}>Cancelar</button><button className="btn-primary" onClick={guardarEdicion}>Guardar</button></>
+                <><button className="btn-icon" style={{width: 'auto'}} onClick={() => setModoEdicion(false)}>Cancelar</button><button className="btn-primary" onClick={guardarEdicion}>Guardar</button></>
               ) : (
-                <><button className="btn-icon" onClick={() => setTareaSeleccionada(null)}>Cerrar</button><button className="btn-primary" onClick={iniciarEdicion}>Editar</button></>
+                <><button className="btn-icon" style={{width: 'auto'}} onClick={() => setTareaSeleccionada(null)}>Cerrar</button><button className="btn-primary" onClick={iniciarEdicion}>Editar</button></>
               )}
             </div>
           </div>
         </div>
       )}
-      
+
+      {/* MODAL BORRAR */}
       {tareaABorrar && (
         <div className="modal-overlay" onClick={() => setTareaABorrar(null)}>
           <div className="modal-content modal-sm" onClick={(e) => e.stopPropagation()}>
-            <h2 className="danger-text">Confirmar Borrado</h2>
-            <p>¿Borrar <strong>"{tareaABorrar.titulo}"</strong>?</p>
+            <h2 className="danger-text">Confirmar Eliminación</h2>
+            <p>¿Seguro que quieres eliminar <strong>"{tareaABorrar.titulo}"</strong>?</p>
             <div className="modal-actions">
-              <button className="btn-icon" onClick={() => setTareaABorrar(null)}>No</button>
-              <button className="btn-primary btn-danger" onClick={ejecutarBorrado}>Sí, Borrar</button>
+              <button className="btn-icon" style={{width: 'auto'}} onClick={() => setTareaABorrar(null)}>No, cancelar</button>
+              <button className="btn-primary btn-danger" onClick={ejecutarBorrado}>Sí, Eliminar</button>
             </div>
           </div>
         </div>
