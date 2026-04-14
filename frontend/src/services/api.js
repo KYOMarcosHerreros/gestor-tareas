@@ -1,12 +1,12 @@
 // src/services/api.js
 
-const API_URL = 'https://unsocialized-unstalemated-corie.ngrok-free.dev';
+const API_URL = 'https://tareasapi-dlf7.onrender.com';
 
 const getHeaders = () => {
   const token = sessionStorage.getItem('token');
   const headers = {
     'Content-Type': 'application/json',
-    'ngrok-skip-browser-warning': 'true',
+
   };
   if (token) {
     headers['Authorization'] = `Bearer ${token}`;

@@ -11,8 +11,8 @@ using TareasAPI.Data;
 namespace TareasAPI.Migrations
 {
     [DbContext(typeof(TareasContext))]
-    [Migration("20260408133735_NuevaRelacionUsuarios")]
-    partial class NuevaRelacionUsuarios
+    [Migration("20260414072453_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -39,6 +39,9 @@ namespace TareasAPI.Migrations
 
                     b.Property<DateTime>("FechaLimite")
                         .HasColumnType("TEXT");
+
+                    b.Property<bool>("FechaModificada")
+                        .HasColumnType("INTEGER");
 
                     b.Property<int>("Prioridad")
                         .HasColumnType("INTEGER");
