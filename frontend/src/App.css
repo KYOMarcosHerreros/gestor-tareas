@@ -717,3 +717,82 @@ h2 {
     visibility: hidden;
   }
 }
+
+/* =========================================
+   11. DISEÑO RESPONSIVE (MÓVILES)
+   ========================================= */
+@media (max-width: 768px) {
+  
+  /* 0. MATAR EL BUG DEL DESPLAZAMIENTO HORIZONTAL */
+  html, body, #root {
+    overflow-x: hidden; /* Evita que la pantalla se pueda mover hacia los lados */
+    width: 100%;
+  }
+  *, *::before, *::after {
+    box-sizing: border-box; /* Obliga a que los márgenes no agranden la pantalla */
+  }
+
+  /* 1. Header: Todo centrado y apilado para que no se pise el logo con el texto */
+  .header-content {
+    flex-direction: column;
+    padding: 15px;
+    gap: 15px;
+  }
+  .header-left-group {
+    flex-direction: column; /* Apila el Logo y el Título */
+    gap: 10px;
+  }
+  .header-title-link {
+    border-left: none; /* Quitamos la rayita en móvil */
+    margin-left: 0;
+    padding-left: 0;
+  }
+  .header-right-group {
+    width: 100%;
+    justify-content: center;
+    flex-direction: column; /* Apila el correo y el botón de Cerrar Sesión */
+    gap: 10px;
+    text-align: center;
+  }
+
+  /* 2. Footer: Ocupando su espacio correctamente */
+  .main-footer {
+    width: 100%;
+    padding: 20px 15px;
+  }
+
+  /* 3. El Dashboard: Columnas a filas */
+  .dashboard-layout {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  /* 4. El Sidebar (Contador): Le quitamos el pegamento (!important) para que baje */
+  .dashboard-sidebar, .sidebar-wrapper {
+    flex: 100%;
+    width: 100%;
+    position: static !important; /* ⬅️ Obliga al contador a fluir con la página */
+    top: auto;
+    margin-bottom: 10px;
+  }
+
+  /* 5. Título y Botón Nueva Tarea */
+  .page-header {
+    flex-direction: column;
+    align-items: stretch; 
+    gap: 15px;
+  }
+  .page-header .btn-primary {
+    width: 100%; /* Botón gigante, perfecto para dedos */
+  }
+
+  /* 6. El Grid de Tareas y contenedor central */
+  .container {
+    padding: 0 15px; /* Ajustamos márgenes para que la tarjeta no empuje la pantalla */
+    margin: 15px auto; 
+  }
+  .task-list {
+    grid-template-columns: 1fr; /* Forzamos 1 sola columna */
+    gap: 15px;
+  }
+}
